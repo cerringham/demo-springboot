@@ -13,9 +13,9 @@ public class DemoService {
     }
 
     public String nameSurnameToUpperCase(String name, String surname) {
-        if(name != null && !name.isEmpty() && surname != null && !surname.isEmpty())
-            return name.toUpperCase().concat(" ").concat(surname.toUpperCase());
-        else
+        if (name == null && name.isEmpty() && surname == null && surname.isEmpty())
             return "no parameter";
+        else
+            return name.toUpperCase().concat(surname.toUpperCase());
     }
 }
