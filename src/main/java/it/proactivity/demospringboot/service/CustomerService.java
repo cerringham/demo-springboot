@@ -12,10 +12,9 @@ public class CustomerService {
 
     CustomerUtility customerUtility = new CustomerUtility();
 
-    public List<CustomerDto> customerAllInformationList() {
+    public List<Customer> customerAllInformationList() {
         List<Customer> customerList = customerUtility.getAll();
-        return customerList.stream().map(f -> new CustomerDto(f.getId(), f.getName(), f.getEmail(), f.getPhoneNumber(),
-                f.getDetail())).collect(Collectors.toList());
+        return customerList;
     }
 
     public Customer customerById(Long id) {

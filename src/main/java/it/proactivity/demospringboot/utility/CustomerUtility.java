@@ -4,6 +4,7 @@ import it.proactivity.demospringboot.model.Customer;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 
 public class CustomerUtility {
@@ -21,8 +22,15 @@ public class CustomerUtility {
         String query = "SELECT c FROM Customer c WHERE c.id = :id";
         Query<Customer> customerQuery = session.createQuery(query)
                 .setParameter("id", id);
+        Customer customer;
+        try {
+            customer = customerQuery.getSingleResult();
+        }
+        catch (NoResultException e) {
+            return null;
+        }
         QueryUtils.endSession(session);
-        return customerQuery.getSingleResult();
+        return customer;
     }
 
     public List<Customer> getAllCustomersByName(String name) {
