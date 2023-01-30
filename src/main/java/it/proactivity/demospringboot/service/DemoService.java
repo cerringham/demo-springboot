@@ -2,6 +2,10 @@ package it.proactivity.demospringboot.service;
 
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
+
 @Service
 public class DemoService {
 
@@ -13,9 +17,25 @@ public class DemoService {
     }
 
     public String nameSurnameToUpperCase(String name, String surname) {
-        if(name != null && !name.isEmpty() && surname != null && !surname.isEmpty())
-            return name.toUpperCase().concat(" ").concat(surname.toUpperCase());
+        StringBuilder sb = new StringBuilder();
+
+        if(name != null && !name.isEmpty()) {
+            sb.append(name.toUpperCase());
+        }
+        if(surname != null && !surname.isEmpty()) {
+            if(!sb.isEmpty()) {
+                sb.append(" ");
+            }
+            sb.append(surname.toUpperCase());
+        }
+
+        if(sb.isEmpty())
+            return "no parameters";
         else
-            return "no parameter";
+            return sb.toString();
+    }
+
+    public List<String> createFakeList() {
+        return Arrays.asList("Come as you are", "Nevermind", "Smells like ten spirit");
     }
 }

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 //@Controller
 @RestController
 public class DemoController {
@@ -33,5 +35,10 @@ public class DemoController {
     @GetMapping("/welcome-page-parameter")
     public String welcomePageParameter(@RequestParam(required = false) String name, @RequestParam String surname) {
         return demoService.nameSurnameToUpperCase(name, surname);
+    }
+
+    @GetMapping("/list")
+    public List<String> list() {
+        return demoService.createFakeList();
     }
 }
