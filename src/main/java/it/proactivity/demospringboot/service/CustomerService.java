@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 @Service
 public class CustomerService {
 
-
     CustomerUtility customerUtility = new CustomerUtility();
 
     public List<CustomerDto> getAllCustomers() {
@@ -46,4 +45,21 @@ public class CustomerService {
 
         return customerDtoList;
     }
+
+    public Boolean createOrUpdate(Long id, String name, String email, String phoneNumber, String detail) throws IllegalArgumentException{
+        Boolean insert = customerUtility.createOrUpdateCustomer(id, name, email, phoneNumber, detail);
+        if (insert) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public Boolean deleteCustomer(Long id) {
+        if (id == null || id == 0l) {
+            return false;
+        }
+        return customerUtility.deleteCustomer(id);
+    }
+
 }
