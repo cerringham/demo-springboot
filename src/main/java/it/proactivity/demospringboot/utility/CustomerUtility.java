@@ -3,6 +3,8 @@ package it.proactivity.demospringboot.utility;
 import it.proactivity.demospringboot.model.Customer;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+
+import javax.persistence.NoResultException;
 import java.util.List;
 
 public class CustomerUtility {
@@ -23,19 +25,20 @@ public class CustomerUtility {
         return customerList;
     }
 
-    public Customer getCustomerFromId(Long id) {
-        Session session = QueryUtils.createSession();
+    public Customer getCustomerFromId(Session session, Long id) {
+
         String getCustomerFromId = "SELECT c FROM Customer c " +
                 "WHERE c.id = :id";
         Query<Customer> query = session.createQuery(getCustomerFromId).setParameter("id", id);
 
-        Customer customer = query.getSingleResult();
-        if (customer == null) {
-            QueryUtils.endSession(session);
+        try{
+            Customer customer = query.getSingleResult();
+
+            return customer;
+        }catch (NoResultException e) {
+
             return null;
         }
-        QueryUtils.endSession(session);
-        return customer;
     }
 
     public List<Customer> findCustomerLike(String name) {
@@ -52,42 +55,52 @@ public class CustomerUtility {
         return customers;
     }
 
-    public Boolean createOrUpdateCustomer(Long id, String name, String email, String phoneNumber, String detail)
+    public Boolean insertCustomer(String name, String email, String phoneNumber, String detail)
             throws IllegalArgumentException {
 
         if (name == null || name.isEmpty() || email == null || email.isEmpty() || phoneNumber == null || phoneNumber.isEmpty()) {
-            return null;
+            return false;
         }
         Session session = QueryUtils.createSession();
         List<Customer> customers = getAllCustomer();
         Boolean nameExists = checkExistingName(customers, name);
 
-        if ((id == null || id == 0l)) {
-            //insert customer
             if (!nameExists) {
                 Customer customer = createCustomer(name, email, phoneNumber, detail);
                 session.persist(customer);
                 QueryUtils.endSession(session);
+                Integer numberOfRecords = QueryUtils.countRecord("Customer");
+
                 return true;
             } else {
                 QueryUtils.endSession(session);
                 throw new IllegalArgumentException("Name already exists");
             }
+    }
+
+    public Boolean updateCustomer(Long id, String name, String email, String phoneNumber, String detail) throws IllegalArgumentException {
+
+        if (id == null || id == 0l || name == null || name.isEmpty() || email == null || email.isEmpty() ||
+        phoneNumber == null || phoneNumber.isEmpty()) {
+            return false;
+        }
+        Session session = QueryUtils.createSession();
+        List<Customer> customers = getAllCustomer();
+        Boolean nameExists = checkExistingName(customers, name);
+        Customer customerById = getCustomerFromId(session, id);
+        Integer numberOfRecords = QueryUtils.countRecord("Customer");
+
+        if (customerById == null) {
+            QueryUtils.endSession(session);
+            return false;
         } else {
-            //update customer
-            Customer customerById = getCustomerFromId(id);
-            if (customerById == null) {
+            if (nameExists) {
                 QueryUtils.endSession(session);
-                return false;
+                throw new IllegalArgumentException("Name already exists");
             } else {
-                if (nameExists) {
-                    QueryUtils.endSession(session);
-                    throw new IllegalArgumentException("Name already exists");
-                } else {
-                    setCustomerParameters(customerById, name, email, phoneNumber, detail);
-                    QueryUtils.endSession(session);
-                    return true;
-                }
+                setCustomerParameters(customerById, name, email, phoneNumber, detail);
+                QueryUtils.endSession(session);
+                return true;
             }
         }
     }
@@ -96,7 +109,7 @@ public class CustomerUtility {
             return false;
         }
         Session session = QueryUtils.createSession();
-        Customer customer = getCustomerFromId(id);
+        Customer customer = getCustomerFromId(session, id);
 
         if (customer == null) {
             QueryUtils.endSession(session);
@@ -104,6 +117,7 @@ public class CustomerUtility {
         } else {
             session.delete(customer);
             QueryUtils.endSession(session);
+            Integer numberOfRecords = QueryUtils.countRecord("Customer");
             return true;
         }
     }

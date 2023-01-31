@@ -1,7 +1,6 @@
 package it.proactivity.demospringboot.controller;
 
 import it.proactivity.demospringboot.dto.CustomerDto;
-import it.proactivity.demospringboot.model.Customer;
 import it.proactivity.demospringboot.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,17 +32,35 @@ public class CustomerController {
         return customers;
     }
 
-    @RequestMapping(value = "/create-or-update-customer",method = { RequestMethod.GET, RequestMethod.POST })
-    public String createOrUpdateCustomer(@RequestParam Long id, @RequestParam String name, @RequestParam String email,
+
+    @RequestMapping(value = "/insert-customer",method = { RequestMethod.GET, RequestMethod.POST })
+    public String insertCustomer(@RequestParam String name, @RequestParam String email,
                                        @RequestParam String phoneNumber, @RequestParam String detail) throws IllegalArgumentException {
 
-        customerService.createOrUpdate(id, name, email, phoneNumber, detail);
-        return "insert or update successfull";
+        if(customerService.insertCustomer(name, email, phoneNumber, detail)) {
+            return "Insert successful";
+        }else {
+          return "Insert failed";
+        }
+
+    }
+
+    @RequestMapping(value = "/update-customer", method = { RequestMethod.GET, RequestMethod.PUT})
+    public String updateCustomer(@RequestParam Long id, @RequestParam String name, @RequestParam String email,
+                                 @RequestParam String phoneNumber, @RequestParam String detail) throws IllegalArgumentException {
+        if(customerService.updateCustomer(id, name, email, phoneNumber, detail)) {
+            return "Update successfull";
+        }else {
+            return "Update failed";
+        }
     }
 
     @RequestMapping(value = "/delete-customer/{id}", method = { RequestMethod.GET, RequestMethod.DELETE })
     public String deleteCustomer(@PathVariable Long id) {
-        customerService.deleteCustomer(id);
-       return "Delete successfull";
+        if(customerService.deleteCustomer(id)) {
+            return "Delete successfull";
+        } else {
+            return "Delete failed";
+        }
     }
 }

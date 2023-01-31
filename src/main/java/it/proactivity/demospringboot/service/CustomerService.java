@@ -3,7 +3,8 @@ package it.proactivity.demospringboot.service;
 import it.proactivity.demospringboot.dto.CustomerDto;
 import it.proactivity.demospringboot.model.Customer;
 import it.proactivity.demospringboot.utility.CustomerUtility;
-import org.springframework.beans.factory.annotation.Autowired;
+import it.proactivity.demospringboot.utility.QueryUtils;
+import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,11 +26,14 @@ public class CustomerService {
     }
 
     public CustomerDto getCustomerFromId(Long id) {
-        Customer customer = customerUtility.getCustomerFromId(id);
+        Session session = QueryUtils.createSession();
+        Customer customer = customerUtility.getCustomerFromId(session, id);
         if (customer == null) {
+            QueryUtils.endSession(session);
             return null;
         }
 
+        QueryUtils.endSession(session);
         CustomerDto customerDto = new CustomerDto(customer.getName(), customer.getEmail());
         return customerDto;
     }
@@ -46,13 +50,14 @@ public class CustomerService {
         return customerDtoList;
     }
 
-    public Boolean createOrUpdate(Long id, String name, String email, String phoneNumber, String detail) throws IllegalArgumentException{
-        Boolean insert = customerUtility.createOrUpdateCustomer(id, name, email, phoneNumber, detail);
-        if (insert) {
-            return true;
-        }else {
-            return false;
-        }
+    public Boolean insertCustomer(String name, String email, String phoneNumber, String detail) throws IllegalArgumentException{
+        return customerUtility.insertCustomer(name, email, phoneNumber, detail);
+    }
+
+    public Boolean updateCustomer(Long id, String name, String email, String phoneNumber, String detail) throws IllegalArgumentException
+    {
+        Boolean update = customerUtility.updateCustomer(id, name, email, phoneNumber, detail);
+        return update;
     }
 
     public Boolean deleteCustomer(Long id) {
