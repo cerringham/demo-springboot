@@ -1,5 +1,6 @@
 package it.proactivity.demospringboot.controller;
 
+import it.proactivity.demospringboot.dto.CustomerDto;
 import it.proactivity.demospringboot.model.Customer;
 import it.proactivity.demospringboot.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,21 +18,21 @@ public class CustomerController {
     CustomerService customerService;
 
     @GetMapping("/customers")
-    public List<Customer> getAllCustomers() {
-        List<Customer> customers = customerService.getAllCustomers();
+    public List<CustomerDto> getAllCustomers() {
+        List<CustomerDto> customers = customerService.getAllCustomers();
 
         return customers;
     }
 
     @GetMapping("/customers/{id}")
-    public Customer getCustomer(@PathVariable Long id) {
-        Customer customer = customerService.getCustomerFromId(id);
+    public CustomerDto getCustomer(@PathVariable Long id) {
+        CustomerDto customer = customerService.getCustomerFromId(id);
         return customer;
     }
 
     @GetMapping("/customer-like")
-    public List<Customer> getCustomerLike(@RequestParam String name) {
-        List<Customer> customers = customerService.findCustomerLike(name);
+    public List<CustomerDto> getCustomerLike(@RequestParam String name) {
+        List<CustomerDto> customers = customerService.findCustomerLike(name);
         return customers;
     }
 }

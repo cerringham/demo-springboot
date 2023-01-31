@@ -51,6 +51,24 @@ public class CustomerUtility {
         }
         QueryUtils.endSession(session);
         return customers;
+    }
 
+    public Boolean insertCustomer(Customer customer) {
+        Session session = QueryUtils.createSession();
+        String insertIntoCustomer = "INSERT INTO Customer c(c.name, c.email, c.phoneNumber, c.detail) " +
+                "VALUES(:name, :email, :phoneNumber, :detail)";
+
+        Query<Customer> query = session.createQuery(insertIntoCustomer)
+                .setParameter("name", customer.getName())
+                .setParameter("email", customer.getEmail())
+                .setParameter("phoneNumber", customer.getPhoneNumber())
+                .setParameter("detail", customer.getDetail());
+
+        int res = query.executeUpdate();
+        if (res != 0) {
+            return true;
+        }else {
+            return false;
+        }
     }
 }
