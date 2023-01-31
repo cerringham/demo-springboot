@@ -16,17 +16,17 @@ public class CustomerController {
     CustomerService customerService;
 
     @GetMapping("/customer/details-list")
-    public List<Customer> getAllCustomers() {
+    public List<CustomerDto> getAllCustomers() {
         return customerService.customerAllInformationList();
     }
 
     @GetMapping("/customer/info-id")
-    public Customer getCustomerById(@RequestParam Long id) {
+    public CustomerDto getCustomerById(@RequestParam Long id) {
         return customerService.customerById(id);
     }
 
     @GetMapping("/customer/list-of-names")
-    public List<Customer> getCustomerWithName8 (@RequestParam String name) {
+    public List<CustomerDto> getCustomerWithName8 (@RequestParam String name) {
         return customerService.getAllCustomersWithAName(name);
     }
 

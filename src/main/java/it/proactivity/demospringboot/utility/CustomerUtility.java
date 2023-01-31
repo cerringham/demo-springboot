@@ -42,5 +42,10 @@ public class CustomerUtility {
         QueryUtils.endSession(session);
         return result;
     }
+    /*public Boolean addNewCustomer(String name, String email, String phoneNumber, String detail) {
+       Session session = QueryUtils.createSession();
+       String query = "INSERT INTO Customer c (c.name, c.email, c.phoneNumber, c.detail)" +
+               "VALUES(:name, :email, :phoneNumber"
+    }*/
 
 }

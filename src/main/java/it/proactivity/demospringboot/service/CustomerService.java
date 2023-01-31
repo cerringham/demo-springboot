@@ -12,18 +12,23 @@ public class CustomerService {
 
     CustomerUtility customerUtility = new CustomerUtility();
 
-    public List<Customer> customerAllInformationList() {
+    public List<CustomerDto> customerAllInformationList() {
         List<Customer> customerList = customerUtility.getAll();
-        return customerList;
+        return customerList.stream().map(m -> new CustomerDto(m.getId(), m.getName(), m.getEmail(), m.getPhoneNumber(),
+                m.getDetail())).collect(Collectors.toList());
     }
 
-    public Customer customerById(Long id) {
+    public CustomerDto customerById(Long id) {
         Customer customer = customerUtility.getCustomerById(id);
-        return customer;
+        CustomerDto customerDto = new CustomerDto(customer.getId(), customer.getName(), customer.getEmail(),
+                customer.getPhoneNumber(), customer.getDetail());
+        return customerDto;
     }
 
-    public List<Customer> getAllCustomersWithAName(String name) {
+    public List<CustomerDto> getAllCustomersWithAName(String name) {
         List<Customer> customerList = customerUtility.getAllCustomersByName(name);
-        return customerList;
+        return customerList.stream().map(m -> new CustomerDto(m.getId(), m.getName(), m.getEmail(), m.getPhoneNumber(),
+                m.getDetail())).collect(Collectors.toList());
     }
+
 }
