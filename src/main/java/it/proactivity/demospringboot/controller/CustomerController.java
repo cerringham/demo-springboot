@@ -30,6 +30,11 @@ public class CustomerController {
         return customerService.getAllCustomersWithAName(name);
     }
 
+    @GetMapping("/customer/new-customer")
+    public CustomerDto newCustomer(@RequestParam String name, @RequestParam String email, String phoneNumber, String detail) {
+        return
+    }
+
 
 
 }

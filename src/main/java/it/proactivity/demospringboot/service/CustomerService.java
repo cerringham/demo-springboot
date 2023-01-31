@@ -3,8 +3,11 @@ package it.proactivity.demospringboot.service;
 import it.proactivity.demospringboot.dto.CustomerDto;
 import it.proactivity.demospringboot.model.Customer;
 import it.proactivity.demospringboot.utility.CustomerUtility;
+import it.proactivity.demospringboot.utility.QueryUtils;
+import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
+import java.security.PublicKey;
 import java.util.List;
 import java.util.stream.Collectors;
 @Service
@@ -31,4 +34,9 @@ public class CustomerService {
                 m.getDetail())).collect(Collectors.toList());
     }
 
+    public Boolean addNewCustomer(String name, String email, String phoneNumber, String detail) {
+        Session session = QueryUtils.createSession();
+        Boolean customer = customerUtility.addNewCustomer(session, name, email, phoneNumber, detail);
+        return customer;
+    }
 }

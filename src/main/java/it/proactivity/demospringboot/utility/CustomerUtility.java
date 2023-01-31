@@ -42,10 +42,41 @@ public class CustomerUtility {
         QueryUtils.endSession(session);
         return result;
     }
-    /*public Boolean addNewCustomer(String name, String email, String phoneNumber, String detail) {
+    /*public Customer addNewCustomer(String name, String email, String phoneNumber, String detail) {
        Session session = QueryUtils.createSession();
-       String query = "INSERT INTO Customer c (c.name, c.email, c.phoneNumber, c.detail)" +
-               "VALUES(:name, :email, :phoneNumber"
+       String query = "INSERT INTO Customer (name, email, phone_number, detail)" +
+               "VALUES (:name, :email, :phoneNumber, :detail)";
+       Query<Customer> customerQuery = session.createSQLQuery(query)
+               .setParameter("name", name)
+               .setParameter("email", email)
+               .setParameter("phoneNumber", phoneNumber)
+               .setParameter("detail", detail);
+
+       Customer customer = customerQuery.getSingleResult();
+       QueryUtils.endSession(session);
+       return customer;
+
     }*/
+    public Boolean addNewCustomer(Session session, String name, String email, String phoneNumber, String detail) {
+        if (session == null) {
+            return false;
+        }
+        QueryUtils.checkSession(session);
+
+        Customer customer = addCustomer(name, email, phoneNumber, detail);
+        session.persist(customer);
+        QueryUtils.endSession(session);
+        return true;
+    }
+
+    public Customer addCustomer(String name, String email, String phoneNumber, String detail) {
+        Customer customer = new Customer();
+        customer.setName(name);
+        customer.setEmail(email);
+        customer.setPhoneNumber(phoneNumber);
+        customer.setDetail(detail);
+        return customer;
+    }
+
 
 }
