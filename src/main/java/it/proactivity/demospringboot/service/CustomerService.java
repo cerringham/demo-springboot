@@ -7,7 +7,6 @@ import it.proactivity.demospringboot.utility.QueryUtils;
 import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
-import java.security.PublicKey;
 import java.util.List;
 import java.util.stream.Collectors;
 @Service
@@ -36,7 +35,19 @@ public class CustomerService {
 
     public Boolean addNewCustomer(String name, String email, String phoneNumber, String detail) {
         Session session = QueryUtils.createSession();
-        Boolean customer = customerUtility.addNewCustomer(session, name, email, phoneNumber, detail);
-        return customer;
+        Boolean customerAdded = customerUtility.addNewCustomer(session, name, email, phoneNumber, detail);
+        return customerAdded;
     }
+
+    public Boolean deleteACustomer (Long id) {
+        Boolean customerDelete = customerUtility.deleteACustomer(id);
+        return customerDelete;
+    }
+
+    public Boolean updateACustomer (Long id, String name, String email, String phoneNumber, String detail) {
+        Boolean updateCustomer = customerUtility.updateACustomer(id, name, email, phoneNumber, detail);
+        return updateCustomer;
+    }
+
+
 }

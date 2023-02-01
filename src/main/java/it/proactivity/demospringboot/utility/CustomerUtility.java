@@ -69,6 +69,28 @@ public class CustomerUtility {
         return true;
     }
 
+    public Boolean deleteACustomer(Long id) {
+        Session session = QueryUtils.createSession();
+        String query = "SELECT c FROM Customer c WHERE c.id = :id";
+        Query<Customer> customerQuery = session.createQuery(query).setParameter("id", id);
+        List<Customer> customerList = customerQuery.getResultList();
+        if (customerList.size() > 1 || customerList == null) {
+            QueryUtils.endSession(session);
+            return false;
+        }
+        session.delete(customerList.get(0));
+        QueryUtils.endSession(session);
+        return true;
+    }
+
+    public Boolean updateACustomer(Long id, String name, String email, String phoneNumber, String detail) {
+        Session session = QueryUtils.createSession();
+        Customer customer = getCustomerById(id);
+        setCustomer(customer, name, email, phoneNumber, detail);
+        QueryUtils.endSession(session);
+        return true;
+    }
+
     public Customer addCustomer(String name, String email, String phoneNumber, String detail) {
         Customer customer = new Customer();
         customer.setName(name);
@@ -78,5 +100,20 @@ public class CustomerUtility {
         return customer;
     }
 
+    public static Customer setCustomer(Customer customer, String name, String email, String phoneNumber, String detail) {
+        if (name != null) {
+            customer.setName(name);
+        }
+        if (email != null) {
+            customer.setEmail(email);
+        }
+        if (phoneNumber != null) {
+            customer.setPhoneNumber(phoneNumber);
+        }
+        if (detail != null) {
+            customer.setDetail(detail);
+        }
+        return customer;
+    }
 
 }

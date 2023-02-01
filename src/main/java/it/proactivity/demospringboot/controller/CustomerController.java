@@ -30,10 +30,23 @@ public class CustomerController {
         return customerService.getAllCustomersWithAName(name);
     }
 
-    @GetMapping("/customer/new-customer")
+    /*@GetMapping("/customer/new-customer")
     public CustomerDto newCustomer(@RequestParam String name, @RequestParam String email, String phoneNumber, String detail) {
-        return
+        return customerService.addNewCustomer(new CustomerDto(name, email, phoneNumber, detail));
+    }*/
+
+    @GetMapping("/customer/delete")
+    public Boolean deleteCustomer(@RequestParam Long id) {
+        return customerService.deleteACustomer(id);
     }
+
+    @GetMapping("/customer/update")
+    public Boolean updateCustomer(@RequestParam Long id, @RequestParam String name, @RequestParam String email,
+                                  @RequestParam String phoneNumber, @RequestParam String detail ) {
+        return customerService.updateACustomer(id, name, email, phoneNumber, detail);
+    }
+
+
 
 
 
