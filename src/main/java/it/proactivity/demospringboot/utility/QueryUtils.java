@@ -32,12 +32,12 @@ public class QueryUtils {
         session.getTransaction();
     }
 
-    public static Integer countRecord(Session session, String object) {
+    public static Long countRecord(Session session, String object) {
 
         String count = "SELECT COUNT(o.id) FROM "+ object + " o";
-        Query<Integer> query = session.createQuery(count);
+        Query<Long> query = session.createQuery(count);
         try{
-            Integer result = query.getSingleResult();
+            Long result = query.getSingleResult();
             return result;
         }catch (NoResultException e) {
             return null;

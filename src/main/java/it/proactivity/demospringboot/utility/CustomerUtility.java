@@ -63,13 +63,13 @@ public class CustomerUtility {
         }
         Session session = QueryUtils.createSession();
         String existsName = checkExistingName(session, name);
-        Integer recordsBeforeInsert = QueryUtils.countRecord(session, "Customer");
+        Long recordsBeforeInsert = QueryUtils.countRecord(session, "Customer");
 
 
         if (existsName == null) {
             Customer customer = createCustomer(name, email, phoneNumber, detail);
             session.persist(customer);
-            Integer recordsAfterInsert = QueryUtils.countRecord(session, "Customer");
+            Long recordsAfterInsert = QueryUtils.countRecord(session, "Customer");
             QueryUtils.endSession(session);
 
             if (recordsBeforeInsert < recordsAfterInsert) {
@@ -91,8 +91,8 @@ public class CustomerUtility {
             return null;
         }
         Session session = QueryUtils.createSession();
-        Integer recordsBeforeUpdate = QueryUtils.countRecord(session, "Customer");
-        Integer recordsAfterUpdate = 0;
+        Long recordsBeforeUpdate = QueryUtils.countRecord(session, "Customer");
+        Long recordsAfterUpdate = 0l;
         String checkCustomerName = checkExistingName(session, attributeName);
 
         if (checkCustomerName == null) {
@@ -116,7 +116,7 @@ public class CustomerUtility {
         }
         Session session = QueryUtils.createSession();
         Customer customer = getCustomerFromId(session, id);
-        Integer recordsBeforDelete = QueryUtils.countRecord(session, "Customer");
+        Long recordsBeforDelete = QueryUtils.countRecord(session, "Customer");
 
         if (customer == null) {
             QueryUtils.endSession(session);
@@ -124,7 +124,7 @@ public class CustomerUtility {
         } else {
             session.delete(customer);
             QueryUtils.endSession(session);
-            Integer recordsAfterDelete = QueryUtils.countRecord(session, "Customer");
+            Long recordsAfterDelete = QueryUtils.countRecord(session, "Customer");
             if (recordsAfterDelete < recordsBeforDelete) {
                 return -1;
             } else {

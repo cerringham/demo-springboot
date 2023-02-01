@@ -25,6 +25,7 @@
 
         <mapping class="it.proactivity.demospringboot.model.Company"/>
         <mapping class="it.proactivity.demospringboot.model.Customer"/>
+        <mapping class="it.proactivity.demospringboot.model.Project"/>
 
 
     </session-factory>
