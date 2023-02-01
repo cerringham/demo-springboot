@@ -25,8 +25,7 @@ public class CustomerUtility {
         Customer customer;
         try {
             customer = customerQuery.getSingleResult();
-        }
-        catch (NoResultException e) {
+        } catch (NoResultException e) {
             return null;
         }
         QueryUtils.endSession(session);
@@ -37,14 +36,16 @@ public class CustomerUtility {
         Session session = QueryUtils.createSession();
         String query = "SELECT c FROM Customer c WHERE c.name LIKE :name";
         Query<Customer> customerQuery = session.createQuery(query)
-                        .setParameter("name",  "%" + name + "%");
+                .setParameter("name", "%" + name + "%");
         List<Customer> result = customerQuery.getResultList();
         QueryUtils.endSession(session);
         return result;
     }
+
     public Boolean addNewCustomer(Session session, String name, String email, String phoneNumber, String detail) {
+        List<Customer> initialList = getAll();
         if (session == null && QueryUtils.checkParameters(name) && QueryUtils.checkParameters(email) &&
-                QueryUtils.checkParameters(phoneNumber) && QueryUtils.checkParameters(detail) ) {
+                QueryUtils.checkParameters(phoneNumber) && QueryUtils.checkParameters(detail)) {
             return false;
         }
         QueryUtils.checkSession(session);
@@ -52,11 +53,15 @@ public class CustomerUtility {
         Customer customer = addCustomer(name, email, phoneNumber, detail);
         session.persist(customer);
         QueryUtils.endSession(session);
-        return true;
+        List<Customer> updatedList = getAll();
+        if (initialList.size() + 1 == updatedList.size()) {
+            return true;
+        }
+        return false;
     }
 
     public Boolean deleteACustomer(Long id) {
-        List<Customer> updatedCustomerList = getAll();
+        List<Customer> initialList = getAll();
         Session session = QueryUtils.createSession();
         if (session == null && QueryUtils.checkId(id)) {
             return false;
@@ -70,20 +75,23 @@ public class CustomerUtility {
         }
         session.delete(customerList.get(0));
         QueryUtils.endSession(session);
-
-        if (updatedCustomerList.size() == updatedCustomerList.size() -1){
+        List<Customer> updatedList = getAll();
+        if (initialList.size() - updatedList.size() == 1) {
             return true;
         }
+        return false;
     }
 
-    public Boolean updateACustomer(Long id, String name, String email, String phoneNumber, String detail) {
+    public Boolean updateACustomer(Long id, String nameParameter, String newValue) {
         Session session = QueryUtils.createSession();
-        if (session == null && QueryUtils.checkId(id) && QueryUtils.checkParameters(name) &&
-                QueryUtils.checkParameters(email) && QueryUtils.checkParameters(phoneNumber)) {
+        if (session == null && QueryUtils.checkId(id) && QueryUtils.checkIfParameterExists(nameParameter)) {
             return false;
         }
-        Customer customer = getCustomerById(id);
-        setCustomer(customer, name, email, phoneNumber, detail);
+        String query = "UPDATE Customer c SET c." + nameParameter + " = :newValue WHERE c.id =:id";
+        Query<Customer> customerQuery = session.createQuery(query)
+                .setParameter("newValue", newValue)
+                .setParameter("id", id);
+        customerQuery.executeUpdate();
         QueryUtils.endSession(session);
         return true;
     }
@@ -97,20 +105,5 @@ public class CustomerUtility {
         return customer;
     }
 
-    public static Customer setCustomer(Customer customer, String name, String email, String phoneNumber, String detail) {
-        if (name != null) {
-            customer.setName(name);
-        }
-        if (email != null) {
-            customer.setEmail(email);
-        }
-        if (phoneNumber != null) {
-            customer.setPhoneNumber(phoneNumber);
-        }
-        if (detail != null) {
-            customer.setDetail(detail);
-        }
-        return customer;
-    }
 
 }

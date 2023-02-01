@@ -44,8 +44,8 @@ public class CustomerService {
         return customerDelete;
     }
 
-    public Boolean updateACustomer (Long id, String name, String email, String phoneNumber, String detail) {
-        Boolean updateCustomer = customerUtility.updateACustomer(id, name, email, phoneNumber, detail);
+    public Boolean updateACustomer (Long id, String nameParameter, String newValue) {
+        Boolean updateCustomer = customerUtility.updateACustomer(id,nameParameter, newValue);
         return updateCustomer;
     }
 

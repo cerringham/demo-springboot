@@ -36,4 +36,17 @@ public class QueryUtils {
     public static boolean checkId (Long id) {
         return id == null;
     }
+
+    public static boolean checkIfParameterExists(String name) {
+        if (name == "name")
+            return true;
+        if (name == "email")
+            return true;
+        if (name == "phoneNumber")
+            return true;
+        if (name == "detail")
+            return true;
+
+        return false;
+    }
 }

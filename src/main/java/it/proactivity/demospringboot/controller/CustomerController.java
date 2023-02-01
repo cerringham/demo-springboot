@@ -42,9 +42,8 @@ public class CustomerController {
     }
 
     @GetMapping("/customer/update")
-    public Boolean updateCustomer(@RequestParam Long id, @RequestParam String name, @RequestParam String email,
-                                  @RequestParam String phoneNumber, @RequestParam String detail ) {
-        return customerService.updateACustomer(id, name, email, phoneNumber, detail);
+    public Boolean updateCustomer(@RequestParam Long id, @RequestParam String parameter, @RequestParam String value) {
+        return customerService.updateACustomer(id, parameter, value);
     }
 
 
