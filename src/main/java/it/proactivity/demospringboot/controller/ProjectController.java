@@ -27,13 +27,14 @@ public class ProjectController {
 
     @RequestMapping(value = "insert-project", method = {RequestMethod.GET, RequestMethod.POST})
     public String insertProject(@RequestParam String name, @RequestParam String endDate,
-                                 @RequestParam String reportingId, @RequestParam String customerName) {
+                                @RequestParam String reportingId, @RequestParam String customerName) {
 
-        Integer insert = projectService.insertProject(name, endDate, reportingId, customerName);
-        if (insert.equals(1)) {
-            return "Insert successfull";
-        }else {
+        Long insert = projectService.insertProject(name, endDate, reportingId, customerName);
+
+        if (insert == null) {
             return "Insert denied";
+        } else {
+            return "Insert successfull";
         }
     }
 

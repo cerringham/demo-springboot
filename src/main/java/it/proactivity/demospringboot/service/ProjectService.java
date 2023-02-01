@@ -25,7 +25,7 @@ public class ProjectService {
     }
 
     public List<ProjectCustomerDto> getAllProjectWithCustomerInformation() {
-        List<Project> projects = projectUtility.getAllProject();
+        List<Project> projects = projectUtility.getAllProjectWithCustomerInformation();
         List<ProjectCustomerDto> projectCustomerDtos = projects.stream()
                 .map(p -> new ProjectCustomerDto(p.getId(), p.getName(), p.getEndDate(), p.getReportingId(),
                         p.getCustomer().getName(), p.getCustomer().getDetail()))
@@ -34,10 +34,10 @@ public class ProjectService {
         return projectCustomerDtos;
     }
 
-    public Integer insertProject(String name, String endDate, String reportingId, String customerName) {
-        try{
+    public Long insertProject(String name, String endDate, String reportingId, String customerName) {
+        try {
             return projectUtility.insertProject(name, endDate, reportingId, customerName);
-        }catch (Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ProjectUtility {
 
-    public List<Project> getAllProject() {
+    public List<Project> getAllProjectWithCustomerInformation() {
         Session session = QueryUtils.createSession();
         String getAllProject = "SELECT p FROM Project p LEFT JOIN FETCH p.customer";
 
@@ -21,7 +21,17 @@ public class ProjectUtility {
         return projects;
     }
 
-    public Integer insertProject(String name, String endDate, String reportingId, String customerName) throws Exception {
+    public List<Project> getAllProject() {
+        Session session = QueryUtils.createSession();
+        String getAllProject = "SELECT p FROM Project p";
+
+        Query<Project> query = session.createQuery(getAllProject);
+        List<Project> projects = query.getResultList();
+        QueryUtils.endSession(session);
+        return projects;
+    }
+
+    public Long insertProject(String name, String endDate, String reportingId, String customerName) throws Exception {
         if (name == null || name.isEmpty() || endDate == null || endDate.isEmpty() || reportingId == null ||
                 reportingId.isEmpty() || customerName == null || customerName.isEmpty()) {
             return null;
@@ -45,7 +55,7 @@ public class ProjectUtility {
         QueryUtils.endSession(session);
 
         if (recordsBeforInsert < recordsAfterInsert) {
-            return 1;
+            return 1l;
         } else {
             throw new Exception();
         }
