@@ -7,6 +7,7 @@ import it.proactivity.demospringboot.utility.QueryUtils;
 import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,19 +51,18 @@ public class CustomerService {
         return customerDtoList;
     }
 
-    public Boolean insertCustomer(String name, String email, String phoneNumber, String detail) throws IllegalArgumentException{
+    public Integer insertCustomer(String name, String email, String phoneNumber, String detail) throws Exception {
         return customerUtility.insertCustomer(name, email, phoneNumber, detail);
     }
 
-    public Boolean updateCustomer(Long id, String name, String email, String phoneNumber, String detail) throws IllegalArgumentException
-    {
-        Boolean update = customerUtility.updateCustomer(id, name, email, phoneNumber, detail);
+    public Integer updateCustomer(Long id, String attributeName, String attributeValue) throws IllegalArgumentException {
+        Integer update = customerUtility.updateCustomer(id, attributeName, attributeValue);
         return update;
     }
 
-    public Boolean deleteCustomer(Long id) {
+    public Integer deleteCustomer(Long id) {
         if (id == null || id == 0l) {
-            return false;
+            return null;
         }
         return customerUtility.deleteCustomer(id);
     }

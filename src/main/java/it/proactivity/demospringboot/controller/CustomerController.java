@@ -33,31 +33,31 @@ public class CustomerController {
     }
 
 
-    @RequestMapping(value = "/insert-customer",method = { RequestMethod.GET, RequestMethod.POST })
+    @RequestMapping(value = "/insert-customer", method = {RequestMethod.GET, RequestMethod.POST})
     public String insertCustomer(@RequestParam String name, @RequestParam String email,
-                                       @RequestParam String phoneNumber, @RequestParam String detail) throws IllegalArgumentException {
+                                 @RequestParam String phoneNumber, @RequestParam String detail) throws Exception {
 
-        if(customerService.insertCustomer(name, email, phoneNumber, detail)) {
+        if ((customerService.insertCustomer(name, email, phoneNumber, detail)).equals(1)) {
             return "Insert successful";
-        }else {
-          return "Insert failed";
+        } else {
+            return "Insert failed";
         }
 
     }
 
-    @RequestMapping(value = "/update-customer", method = { RequestMethod.GET, RequestMethod.PUT})
-    public String updateCustomer(@RequestParam Long id, @RequestParam String name, @RequestParam String email,
-                                 @RequestParam String phoneNumber, @RequestParam String detail) throws IllegalArgumentException {
-        if(customerService.updateCustomer(id, name, email, phoneNumber, detail)) {
+    @RequestMapping(value = "/update-customer", method = {RequestMethod.GET, RequestMethod.PUT})
+    public String updateCustomer(@RequestParam Long id, @RequestParam String name, @RequestParam String email)
+            throws IllegalArgumentException {
+        if ((customerService.updateCustomer(id, name, email)).equals(0)) {
             return "Update successfull";
-        }else {
+        } else {
             return "Update failed";
         }
     }
 
-    @RequestMapping(value = "/delete-customer/{id}", method = { RequestMethod.GET, RequestMethod.DELETE })
+    @RequestMapping(value = "/delete-customer/{id}", method = {RequestMethod.GET, RequestMethod.DELETE})
     public String deleteCustomer(@PathVariable Long id) {
-        if(customerService.deleteCustomer(id)) {
+        if ((customerService.deleteCustomer(id)).equals(-1)) {
             return "Delete successfull";
         } else {
             return "Delete failed";

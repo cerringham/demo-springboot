@@ -63,13 +63,13 @@ public class CustomerUtility {
         }
         Session session = QueryUtils.createSession();
         String existsName = checkExistingName(session, name);
-        Integer recordsBeforeInsert = QueryUtils.countRecord(session,"Customer");
+        Integer recordsBeforeInsert = QueryUtils.countRecord(session, "Customer");
 
 
         if (existsName == null) {
             Customer customer = createCustomer(name, email, phoneNumber, detail);
             session.persist(customer);
-            Integer recordsAfterInsert = QueryUtils.countRecord(session,"Customer");
+            Integer recordsAfterInsert = QueryUtils.countRecord(session, "Customer");
             QueryUtils.endSession(session);
 
             if (recordsBeforeInsert < recordsAfterInsert) {
@@ -84,41 +84,52 @@ public class CustomerUtility {
         }
     }
 
-    public Boolean updateCustomer(Long id, String attributeName, String attributeValue) throws IllegalArgumentException {
+    public Integer updateCustomer(Long id, String attributeName, String attributeValue) throws IllegalArgumentException {
 
         if (id == null || id == 0l || attributeName == null || attributeName.isEmpty() || attributeValue == null ||
                 attributeValue.isEmpty()) {
-            return false;
+            return null;
         }
         Session session = QueryUtils.createSession();
-        Integer recordsBeforeUpdate = QueryUtils.countRecord(session,"Customer");
+        Integer recordsBeforeUpdate = QueryUtils.countRecord(session, "Customer");
+        Integer recordsAfterUpdate = 0;
         String checkCustomerName = checkExistingName(session, attributeName);
 
         if (checkCustomerName == null) {
             String existingAttribute = checkExistingAttribute(session, id, attributeName);
             if (existingAttribute == null) {
-                Customer customer = getCustomerFromId(session, id);
-                customer.getClass()
+                updateCustomer(session, id, attributeName, attributeValue);
+                recordsAfterUpdate = QueryUtils.countRecord(session, "Customer");
+                QueryUtils.endSession(session);
             }
-
+        }
+        if (recordsBeforeUpdate == recordsAfterUpdate) {
+            return 0;
+        } else {
+            throw new IllegalArgumentException();
         }
     }
 
-    public Boolean deleteCustomer(Long id) {
+    public Integer deleteCustomer(Long id) {
         if (id == null || id == 0l) {
-            return false;
+            return null;
         }
         Session session = QueryUtils.createSession();
         Customer customer = getCustomerFromId(session, id);
+        Integer recordsBeforDelete = QueryUtils.countRecord(session, "Customer");
 
         if (customer == null) {
             QueryUtils.endSession(session);
-            return false;
+            return null;
         } else {
             session.delete(customer);
             QueryUtils.endSession(session);
-            Integer numberOfRecords = QueryUtils.countRecord("Customer");
-            return true;
+            Integer recordsAfterDelete = QueryUtils.countRecord(session, "Customer");
+            if (recordsAfterDelete < recordsBeforDelete) {
+                return -1;
+            } else {
+                throw new IllegalArgumentException();
+            }
         }
     }
 
@@ -156,8 +167,8 @@ public class CustomerUtility {
             return null;
         }
 
-       String customerExists = "SELECT c.name FROM Customer c WHERE c.name = :name";
-       Query<String> query = session.createQuery(customerExists).setParameter("name", name);
+        String customerExists = "SELECT c.name FROM Customer c WHERE c.name = :name";
+        Query<String> query = session.createQuery(customerExists).setParameter("name", name);
 
         try {
             String nameAttribute = query.getSingleResult();
@@ -174,10 +185,25 @@ public class CustomerUtility {
         try {
             String attribute = query.getSingleResult();
             return attribute;
-        }catch (NoResultException e) {
+        } catch (NoResultException e) {
             return null;
         }
-
     }
+
+    private Boolean updateCustomer(Session session, Long id, String attributeName, String attributeValue) {
+        String updateCustomer = "UPDATE Customer c " +
+                "SET c." + attributeName + " = :attributeValue " +
+                "WHERE c.id = :id";
+        Query query = session.createQuery(updateCustomer).setParameter("id", id)
+                .setParameter("attributeValue", attributeValue);
+
+        int res = query.executeUpdate();
+
+        if (res != 0) {
+            return true;
+        }
+        return false;
+    }
+
 
 }
