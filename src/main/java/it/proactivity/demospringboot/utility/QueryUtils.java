@@ -28,4 +28,12 @@ public class QueryUtils {
         }
         session.getTransaction();
     }
+
+    public static boolean checkParameters(String s) {
+        return s == null || s.isEmpty();
+    }
+
+    public static boolean checkId (Long id) {
+        return id == null;
+    }
 }

@@ -42,23 +42,9 @@ public class CustomerUtility {
         QueryUtils.endSession(session);
         return result;
     }
-    /*public Customer addNewCustomer(String name, String email, String phoneNumber, String detail) {
-       Session session = QueryUtils.createSession();
-       String query = "INSERT INTO Customer (name, email, phone_number, detail)" +
-               "VALUES (:name, :email, :phoneNumber, :detail)";
-       Query<Customer> customerQuery = session.createSQLQuery(query)
-               .setParameter("name", name)
-               .setParameter("email", email)
-               .setParameter("phoneNumber", phoneNumber)
-               .setParameter("detail", detail);
-
-       Customer customer = customerQuery.getSingleResult();
-       QueryUtils.endSession(session);
-       return customer;
-
-    }*/
     public Boolean addNewCustomer(Session session, String name, String email, String phoneNumber, String detail) {
-        if (session == null) {
+        if (session == null && QueryUtils.checkParameters(name) && QueryUtils.checkParameters(email) &&
+                QueryUtils.checkParameters(phoneNumber) && QueryUtils.checkParameters(detail) ) {
             return false;
         }
         QueryUtils.checkSession(session);
@@ -70,7 +56,11 @@ public class CustomerUtility {
     }
 
     public Boolean deleteACustomer(Long id) {
+        List<Customer> updatedCustomerList = getAll();
         Session session = QueryUtils.createSession();
+        if (session == null && QueryUtils.checkId(id)) {
+            return false;
+        }
         String query = "SELECT c FROM Customer c WHERE c.id = :id";
         Query<Customer> customerQuery = session.createQuery(query).setParameter("id", id);
         List<Customer> customerList = customerQuery.getResultList();
@@ -80,11 +70,18 @@ public class CustomerUtility {
         }
         session.delete(customerList.get(0));
         QueryUtils.endSession(session);
-        return true;
+
+        if (updatedCustomerList.size() == updatedCustomerList.size() -1){
+            return true;
+        }
     }
 
     public Boolean updateACustomer(Long id, String name, String email, String phoneNumber, String detail) {
         Session session = QueryUtils.createSession();
+        if (session == null && QueryUtils.checkId(id) && QueryUtils.checkParameters(name) &&
+                QueryUtils.checkParameters(email) && QueryUtils.checkParameters(phoneNumber)) {
+            return false;
+        }
         Customer customer = getCustomerById(id);
         setCustomer(customer, name, email, phoneNumber, detail);
         QueryUtils.endSession(session);

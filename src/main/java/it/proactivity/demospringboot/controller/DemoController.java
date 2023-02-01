@@ -31,7 +31,7 @@ public class DemoController {
         return demoService.nameToUpperCase(name);
     }
 
-    //http://localhost:8080/welcome-page?name=aValue
+    //http://localhost:8080/welcome-page-parameter?name=aValue
     @GetMapping("/welcome-page-parameter")
     public String welcomePageParameter(@RequestParam(required = false) String name, @RequestParam String surname) {
         return demoService.nameSurnameToUpperCase(name, surname);
