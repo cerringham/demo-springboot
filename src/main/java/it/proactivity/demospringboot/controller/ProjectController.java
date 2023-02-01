@@ -25,17 +25,9 @@ public class ProjectController {
         return projectService.getAllProjectWithCustomerInformation();
     }
 
-    @RequestMapping(value = "insert-project", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/insert-project", method = {RequestMethod.GET, RequestMethod.POST})
     public String insertProject(@RequestParam String name, @RequestParam String endDate,
                                 @RequestParam String reportingId, @RequestParam String customerName) {
-
-        Long insert = projectService.insertProject(name, endDate, reportingId, customerName);
-
-        if (insert == null) {
-            return "Insert denied";
-        } else {
-            return "Insert successfull";
-        }
+        return projectService.insertProject(name, endDate, reportingId, customerName);
     }
-
 }

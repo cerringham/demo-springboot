@@ -14,7 +14,6 @@ public class ProjectService {
     ProjectUtility projectUtility = new ProjectUtility();
 
     public List<ProjectDto> getAllProject() {
-
         List<Project> projects = projectUtility.getAllProject();
 
         List<ProjectDto> projectDtos = projects.stream()
@@ -34,9 +33,15 @@ public class ProjectService {
         return projectCustomerDtos;
     }
 
-    public Long insertProject(String name, String endDate, String reportingId, String customerName) {
+    public String insertProject(String name, String endDate, String reportingId, String customerName) {
         try {
-            return projectUtility.insertProject(name, endDate, reportingId, customerName);
+            Long insert = projectUtility.insertProject(name, endDate, reportingId, customerName);
+
+            if (insert == null) {
+                return "Insert denied";
+            } else {
+                return "Insert successfull";
+            }
         } catch (Exception e) {
             return null;
         }
