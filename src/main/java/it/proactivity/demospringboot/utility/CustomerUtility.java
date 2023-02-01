@@ -31,11 +31,11 @@ public class CustomerUtility {
                 "WHERE c.id = :id";
         Query<Customer> query = session.createQuery(getCustomerFromId).setParameter("id", id);
 
-        try{
+        try {
             Customer customer = query.getSingleResult();
 
             return customer;
-        }catch (NoResultException e) {
+        } catch (NoResultException e) {
 
             return null;
         }
@@ -65,23 +65,23 @@ public class CustomerUtility {
         List<Customer> customers = getAllCustomer();
         Boolean nameExists = checkExistingName(customers, name);
 
-            if (!nameExists) {
-                Customer customer = createCustomer(name, email, phoneNumber, detail);
-                session.persist(customer);
-                QueryUtils.endSession(session);
-                Integer numberOfRecords = QueryUtils.countRecord("Customer");
+        if (!nameExists) {
+            Customer customer = createCustomer(name, email, phoneNumber, detail);
+            session.persist(customer);
+            QueryUtils.endSession(session);
+            Integer numberOfRecords = QueryUtils.countRecord("Customer");
 
-                return true;
-            } else {
-                QueryUtils.endSession(session);
-                throw new IllegalArgumentException("Name already exists");
-            }
+            return true;
+        } else {
+            QueryUtils.endSession(session);
+            throw new IllegalArgumentException("Name already exists");
+        }
     }
 
     public Boolean updateCustomer(Long id, String name, String email, String phoneNumber, String detail) throws IllegalArgumentException {
 
         if (id == null || id == 0l || name == null || name.isEmpty() || email == null || email.isEmpty() ||
-        phoneNumber == null || phoneNumber.isEmpty()) {
+                phoneNumber == null || phoneNumber.isEmpty()) {
             return false;
         }
         Session session = QueryUtils.createSession();
@@ -104,6 +104,7 @@ public class CustomerUtility {
             }
         }
     }
+
     public Boolean deleteCustomer(Long id) {
         if (id == null || id == 0l) {
             return false;
@@ -121,6 +122,7 @@ public class CustomerUtility {
             return true;
         }
     }
+
     private static Customer createCustomer(String name, String email, String phoneNumber, String detail) {
         Customer customer = new Customer();
         customer.setName(name);
@@ -130,6 +132,7 @@ public class CustomerUtility {
             customer.setDetail(detail);
         return customer;
     }
+
     private static void setCustomerParameters(Customer customer, String name, String email, String phoneNumber, String detail) {
         if (name != null || !name.isEmpty()) {
             customer.setName(name);
@@ -144,6 +147,7 @@ public class CustomerUtility {
             customer.setDetail(detail);
         }
     }
+
     private Boolean checkExistingName(List<Customer> customers, String name) {
         Boolean nameExists = false;
         for (Customer c : customers) {
