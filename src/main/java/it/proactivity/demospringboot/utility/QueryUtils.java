@@ -32,8 +32,8 @@ public class QueryUtils {
         session.getTransaction();
     }
 
-    public static Integer countRecord(String object) {
-        Session session = createSession();
+    public static Integer countRecord(Session session, String object) {
+
         String count = "SELECT COUNT(o.id) FROM "+ object + " o";
         Query<Integer> query = session.createQuery(count);
         try{

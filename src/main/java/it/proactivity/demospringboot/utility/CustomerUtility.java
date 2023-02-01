@@ -55,53 +55,52 @@ public class CustomerUtility {
         return customers;
     }
 
-    public Boolean insertCustomer(String name, String email, String phoneNumber, String detail)
-            throws IllegalArgumentException {
+    public Integer insertCustomer(String name, String email, String phoneNumber, String detail)
+            throws Exception {
 
         if (name == null || name.isEmpty() || email == null || email.isEmpty() || phoneNumber == null || phoneNumber.isEmpty()) {
-            return false;
+            return null;
         }
         Session session = QueryUtils.createSession();
-        List<Customer> customers = getAllCustomer();
-        Boolean nameExists = checkExistingName(customers, name);
+        String existsName = checkExistingName(session, name);
+        Integer recordsBeforeInsert = QueryUtils.countRecord(session,"Customer");
 
-        if (!nameExists) {
+
+        if (existsName == null) {
             Customer customer = createCustomer(name, email, phoneNumber, detail);
             session.persist(customer);
+            Integer recordsAfterInsert = QueryUtils.countRecord(session,"Customer");
             QueryUtils.endSession(session);
-            Integer numberOfRecords = QueryUtils.countRecord("Customer");
 
-            return true;
+            if (recordsBeforeInsert < recordsAfterInsert) {
+                return 1;
+            } else {
+                throw new Exception();
+            }
+
         } else {
             QueryUtils.endSession(session);
             throw new IllegalArgumentException("Name already exists");
         }
     }
 
-    public Boolean updateCustomer(Long id, String name, String email, String phoneNumber, String detail) throws IllegalArgumentException {
+    public Boolean updateCustomer(Long id, String attributeName, String attributeValue) throws IllegalArgumentException {
 
-        if (id == null || id == 0l || name == null || name.isEmpty() || email == null || email.isEmpty() ||
-                phoneNumber == null || phoneNumber.isEmpty()) {
+        if (id == null || id == 0l || attributeName == null || attributeName.isEmpty() || attributeValue == null ||
+                attributeValue.isEmpty()) {
             return false;
         }
         Session session = QueryUtils.createSession();
-        List<Customer> customers = getAllCustomer();
-        Boolean nameExists = checkExistingName(customers, name);
-        Customer customerById = getCustomerFromId(session, id);
-        Integer numberOfRecords = QueryUtils.countRecord("Customer");
+        Integer recordsBeforeUpdate = QueryUtils.countRecord(session,"Customer");
+        String checkCustomerName = checkExistingName(session, attributeName);
 
-        if (customerById == null) {
-            QueryUtils.endSession(session);
-            return false;
-        } else {
-            if (nameExists) {
-                QueryUtils.endSession(session);
-                throw new IllegalArgumentException("Name already exists");
-            } else {
-                setCustomerParameters(customerById, name, email, phoneNumber, detail);
-                QueryUtils.endSession(session);
-                return true;
+        if (checkCustomerName == null) {
+            String existingAttribute = checkExistingAttribute(session, id, attributeName);
+            if (existingAttribute == null) {
+                Customer customer = getCustomerFromId(session, id);
+                customer.getClass()
             }
+
         }
     }
 
@@ -148,14 +147,37 @@ public class CustomerUtility {
         }
     }
 
-    private Boolean checkExistingName(List<Customer> customers, String name) {
-        Boolean nameExists = false;
-        for (Customer c : customers) {
-            if (c.getName().equalsIgnoreCase(name)) {
-                nameExists = true;
-                break;
-            }
+    private String checkExistingName(Session session, String name) {
+        if (session == null) {
+            return null;
         }
-        return nameExists;
+
+        if (name == null || name.isEmpty()) {
+            return null;
+        }
+
+       String customerExists = "SELECT c.name FROM Customer c WHERE c.name = :name";
+       Query<String> query = session.createQuery(customerExists).setParameter("name", name);
+
+        try {
+            String nameAttribute = query.getSingleResult();
+
+            return nameAttribute;
+        } catch (NoResultException e) {
+            return null;
+        }
     }
+
+    private String checkExistingAttribute(Session session, Long id, String attributeName) {
+        String getAttributeValue = "SELECT c." + attributeName + " FROM Customer c WHERE c.id = :id";
+        Query<String> query = session.createQuery(getAttributeValue).setParameter("id", id);
+        try {
+            String attribute = query.getSingleResult();
+            return attribute;
+        }catch (NoResultException e) {
+            return null;
+        }
+
+    }
+
 }
