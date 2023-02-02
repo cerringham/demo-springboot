@@ -13,11 +13,9 @@ import java.time.LocalDate;
 public class ProjectDto {
 
     private Long id;
-
     private String name;
-
     private LocalDate endDate;
-
+    private String reportingId;
 
     public ProjectDto(Long id, String name, LocalDate endDate) {
         this.id = id;

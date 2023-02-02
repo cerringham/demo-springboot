@@ -1,5 +1,7 @@
 package it.proactivity.demospringboot.service;
 
+import it.proactivity.demospringboot.dto.ProjectDto;
+import it.proactivity.demospringboot.model.Project;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -37,5 +39,15 @@ public class DemoService {
 
     public List<String> createFakeList() {
         return Arrays.asList("Come as you are", "Nevermind", "Smells like ten spirit");
+    }
+
+    public Boolean addProject(ProjectDto projectDto) {
+        Project project = new Project();
+        project.setName(projectDto.getName());
+        project.setEndDate(projectDto.getEndDate());
+        project.setReportingId(projectDto.getReportingId());
+
+        // salvataggio su db
+        return Boolean.TRUE;
     }
 }

@@ -1,5 +1,7 @@
 package it.proactivity.demospringboot.controller;
 
+import it.proactivity.demospringboot.dto.ProjectDto;
+import it.proactivity.demospringboot.model.Project;
 import it.proactivity.demospringboot.service.DemoService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +42,10 @@ public class DemoController {
     @GetMapping("/list")
     public List<String> list() {
         return demoService.createFakeList();
+    }
+
+    @PostMapping("/project/add")
+    public Boolean addProject(@RequestBody ProjectDto projectDto) {
+        return demoService.addProject(projectDto);
     }
 }
