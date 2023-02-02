@@ -32,7 +32,7 @@ public class CustomerUtility {
         return customer;
     }
 
-    public List<Customer> getAllCustomersByName(String name) {
+    public static List<Customer> getAllCustomersByName(String name) {
         Session session = QueryUtils.createSession();
         String query = "SELECT c FROM Customer c WHERE c.name LIKE :name";
         Query<Customer> customerQuery = session.createQuery(query)
@@ -42,9 +42,24 @@ public class CustomerUtility {
         return result;
     }
 
+    public static Customer getCustomerByName(String name) {
+        Session session = QueryUtils.createSession();
+        String query = "SELECT c FROM Customer c WHERE c.name = :name";
+        Query<Customer> customerQuery = session.createQuery(query)
+                .setParameter("name", name);
+        Customer customer;
+        try {
+            customer = customerQuery.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+        QueryUtils.endSession(session);
+        return customer;
+    }
+
     public Boolean addNewCustomer(Session session, String name, String email, String phoneNumber, String detail) {
         List<Customer> initialList = getAll();
-        if (session == null && QueryUtils.checkParameters(name) && QueryUtils.checkParameters(email) &&
+        if (QueryUtils.checkParameters(name) && QueryUtils.checkParameters(email) &&
                 QueryUtils.checkParameters(phoneNumber) && QueryUtils.checkParameters(detail)) {
             return false;
         }
