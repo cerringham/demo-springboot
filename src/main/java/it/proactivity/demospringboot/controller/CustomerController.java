@@ -42,7 +42,11 @@ public class CustomerController {
         } else {
             return "Insert failed";
         }
+    }
 
+    @PostMapping("/insert-customer-post")
+    public void insertCustomerWithPostMethod(@RequestBody CustomerDto customerDto) {
+        customerService.insertCustomerWithPost(customerDto);
     }
 
     @RequestMapping(value = "/update-customer", method = {RequestMethod.GET, RequestMethod.PUT})
