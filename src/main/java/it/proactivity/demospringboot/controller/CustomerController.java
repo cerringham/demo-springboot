@@ -1,6 +1,7 @@
 package it.proactivity.demospringboot.controller;
 
 import it.proactivity.demospringboot.dto.CustomerDto;
+import it.proactivity.demospringboot.dto.ProjectDto;
 import it.proactivity.demospringboot.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -63,4 +64,11 @@ public class CustomerController {
             return "Delete failed";
         }
     }
+
+    @PostMapping("/project/add")
+    public Boolean addNewCustomer(@RequestBody String name, @RequestBody String email, @RequestBody String phoneNumber,
+                                  @RequestBody String detail) {
+        return customerService.addCustomerDto(name, email, phoneNumber, detail);
+    }
+
 }

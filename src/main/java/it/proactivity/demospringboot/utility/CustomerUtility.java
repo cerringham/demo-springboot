@@ -1,5 +1,6 @@
 package it.proactivity.demospringboot.utility;
 
+import it.proactivity.demospringboot.dto.CustomerDto;
 import it.proactivity.demospringboot.model.Customer;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -158,7 +159,7 @@ public class CustomerUtility {
         }
     }
 
-    private String checkExistingName(Session session, String name) {
+    public static String checkExistingName(Session session, String name) {
         if (session == null) {
             return null;
         }
@@ -205,5 +206,27 @@ public class CustomerUtility {
         return false;
     }
 
+    public static Boolean addNewCustomer(Session session, CustomerDto customerDto) {
+        QueryUtils.checkSession(session);
+        String name = checkExistingName(session, customerDto.getName());
+        if (name == null) {
+            return true;
+        }
+        CustomerDto customer = addNewCustomerDto(customerDto);
+        if (customer == null) {
+            return false;
+        }
+        session.persist(customer);
+        QueryUtils.endSession(session);
+        return true;
+    }
+
+    public static CustomerDto addNewCustomerDto(CustomerDto customerDto) {
+        Customer customer = new Customer();
+        customer.setEmail(customerDto.getEmail());
+        customer.setPhoneNumber(customerDto.getPhoneNumber());
+        customer.setDetail(customerDto.getDetail());
+        return customerDto;
+    }
 
 }

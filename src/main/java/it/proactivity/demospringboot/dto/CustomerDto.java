@@ -28,6 +28,13 @@ public class CustomerDto {
         this.email = email;
     }
 
+    public CustomerDto(String name, String email, String phoneNumber, String detail) {
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.detail = detail;
+    }
+
 
 
 }

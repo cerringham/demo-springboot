@@ -2,12 +2,12 @@ package it.proactivity.demospringboot.service;
 
 import it.proactivity.demospringboot.dto.CustomerDto;
 import it.proactivity.demospringboot.model.Customer;
+import it.proactivity.demospringboot.model.Project;
 import it.proactivity.demospringboot.utility.CustomerUtility;
 import it.proactivity.demospringboot.utility.QueryUtils;
 import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,6 +65,11 @@ public class CustomerService {
             return null;
         }
         return customerUtility.deleteCustomer(id);
+    }
+
+    public Boolean addCustomerDto(String name, String email, String phoneNumber, String detail) {
+        Session session = QueryUtils.createSession();
+        return customerUtility.addNewCustomer(session, new CustomerDto(name, email, phoneNumber, detail));
     }
 
 }
