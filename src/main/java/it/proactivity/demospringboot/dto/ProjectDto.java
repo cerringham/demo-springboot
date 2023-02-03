@@ -16,10 +16,11 @@ public class ProjectDto {
 
     private String name;
 
-    private LocalDate endDate;
+    private String reportingId;
+    private String endDate;
 
 
-    public ProjectDto(Long id, String name, LocalDate endDate) {
+    public ProjectDto(Long id, String name, String endDate) {
         this.id = id;
         this.name = name;
         this.endDate = endDate;

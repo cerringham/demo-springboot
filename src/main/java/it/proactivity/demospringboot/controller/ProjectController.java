@@ -14,10 +14,12 @@ public class ProjectController {
     @Autowired
     ProjectService projectService;
 
+
     @GetMapping("/projects")
     public List<ProjectDto> getAllProjects() {
         return projectService.getAllProject();
     }
+
 
     @GetMapping("/projects-customer-information")
     public List<ProjectCustomerDto> getAllProjectsWithCustomerInfo() {
@@ -25,9 +27,15 @@ public class ProjectController {
         return projectService.getAllProjectWithCustomerInformation();
     }
 
+
     @RequestMapping(value = "/insert-project", method = {RequestMethod.GET, RequestMethod.POST})
     public String insertProject(@RequestParam String name, @RequestParam String endDate,
                                 @RequestParam String reportingId, @RequestParam String customerName) {
         return projectService.insertProject(name, endDate, reportingId, customerName);
+    }
+
+    @PostMapping("/insert-basic-project")
+    public void insertBasicProject(@RequestBody ProjectDto projectDto) {
+        projectService.insertBasicProject(projectDto);
     }
 }

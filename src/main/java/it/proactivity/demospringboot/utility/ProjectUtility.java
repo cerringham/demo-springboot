@@ -1,9 +1,11 @@
 package it.proactivity.demospringboot.utility;
 
+import it.proactivity.demospringboot.dto.ProjectDto;
 import it.proactivity.demospringboot.model.Customer;
 import it.proactivity.demospringboot.model.Project;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.json.JSONObject;
 
 import javax.persistence.NoResultException;
 import java.time.LocalDate;
@@ -61,6 +63,34 @@ public class ProjectUtility {
         }
     }
 
+    public Boolean insertBasicProject(ProjectDto projectDto) {
+        if (projectDto == null) {
+            return false;
+        }
+        Session session = QueryUtils.createSession();
+        Boolean specialChar = checkSpecialChar(projectDto.getName());
+
+        if (specialChar) {
+            QueryUtils.endSession(session);
+            return false;
+        }
+        LocalDate parsedDate = ParsingUtility.parsingStringToDate(projectDto.getEndDate());
+        if (parsedDate == null) {
+            QueryUtils.endSession(session);
+            return false;
+        }
+        Project project = createProjectWithoutCustomer(projectDto.getName(), parsedDate, projectDto.getReportingId());
+
+        if (project == null) {
+            QueryUtils.endSession(session);
+            return false;
+        }
+
+        session.persist(project);
+        QueryUtils.endSession(session);
+        return true;
+    }
+
     private Customer findCustomerFromName(Session session, String name) {
         if (session == null) {
             return null;
@@ -91,4 +121,26 @@ public class ProjectUtility {
 
         return project;
     }
+
+    private Project createProjectWithoutCustomer(String name, LocalDate endDate, String reportingId) {
+        if (name == null || name.isEmpty() || endDate == null || reportingId == null || reportingId.isEmpty()) {
+            return null;
+        }
+
+        Project project = new Project();
+        project.setName(name);
+        project.setEndDate(endDate);
+        project.setReportingId(reportingId);
+
+
+        return project;
+    }
+
+    private Boolean checkSpecialChar(String name) {
+        if (name.contains("!") || name.contains("£") || name.contains("$") || name.contains("%") || name.contains("&")) {
+            return true;
+        }
+        return false;
+    }
+
 }
