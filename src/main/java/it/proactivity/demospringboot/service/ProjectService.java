@@ -3,7 +3,9 @@ package it.proactivity.demospringboot.service;
 import it.proactivity.demospringboot.dto.ProjectCustomerDto;
 import it.proactivity.demospringboot.dto.ProjectDto;
 import it.proactivity.demospringboot.model.Project;
+import it.proactivity.demospringboot.utility.ParsingUtility;
 import it.proactivity.demospringboot.utility.ProjectUtility;
+import it.proactivity.demospringboot.utility.QueryUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,5 +47,13 @@ public class ProjectService {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public Boolean insertProjectWithDto(ProjectDto projectDto) {
+        if (QueryUtils.correctString(projectDto.getName()) == false &&
+                QueryUtils.correctString(projectDto.getReportingId()) == false){
+            return false;
+        }
+        return projectUtility.addNewProjectWithDto(projectDto);
     }
 }

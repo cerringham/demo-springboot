@@ -23,6 +23,11 @@ public class ProjectDto {
         this.endDate = endDate;
     }
 
+    public ProjectDto(String name, LocalDate endDate, String reportingId) {
+        this.name = name;
+        this.endDate = endDate;
+        this.reportingId = reportingId;
+    }
 
     @Override
     public String toString() {

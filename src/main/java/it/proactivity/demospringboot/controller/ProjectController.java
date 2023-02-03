@@ -30,4 +30,9 @@ public class ProjectController {
                                 @RequestParam String reportingId, @RequestParam String customerName) {
         return projectService.insertProject(name, endDate, reportingId, customerName);
     }
+
+   @PostMapping
+    public Boolean insertProjectWithDto(ProjectDto projectDto) {
+        return projectService.insertProjectWithDto(projectDto);
+   }
 }

@@ -1,5 +1,6 @@
 package it.proactivity.demospringboot.utility;
 
+import it.proactivity.demospringboot.dto.ProjectDto;
 import it.proactivity.demospringboot.model.Customer;
 import it.proactivity.demospringboot.model.Project;
 import org.hibernate.Session;
@@ -89,6 +90,27 @@ public class ProjectUtility {
         project.setReportingId(reportingId);
         project.setCustomer(customer);
 
+        return project;
+    }
+
+    public static Boolean addNewProjectWithDto(ProjectDto projectDto) {
+        Session session = QueryUtils.createSession();
+        QueryUtils.checkSession(session);
+
+        Project project = addNewProjectDto(projectDto);
+        if (project == null) {
+            return false;
+        }
+        session.persist(project);
+        QueryUtils.endSession(session);
+        return true;
+    }
+
+    public static Project addNewProjectDto(ProjectDto projectDto) {
+        Project project = new Project();
+        project.setName(projectDto.getName());
+        project.setEndDate(projectDto.getEndDate());
+        project.setReportingId(projectDto.getReportingId());
         return project;
     }
 }
