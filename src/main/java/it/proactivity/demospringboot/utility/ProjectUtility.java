@@ -93,12 +93,13 @@ public class ProjectUtility {
         return project;
     }
 
-    public static Boolean addNewProjectWithDto(ProjectDto projectDto) {
+    public static Boolean addNewProject(ProjectDto projectDto) {
         Session session = QueryUtils.createSession();
         QueryUtils.checkSession(session);
 
-        Project project = addNewProjectDto(projectDto);
+        Project project = addNewProjectWithDto(projectDto);
         if (project == null) {
+            QueryUtils.endSession(session);
             return false;
         }
         session.persist(project);
@@ -106,7 +107,7 @@ public class ProjectUtility {
         return true;
     }
 
-    public static Project addNewProjectDto(ProjectDto projectDto) {
+    public static Project addNewProjectWithDto(ProjectDto projectDto) {
         Project project = new Project();
         project.setName(projectDto.getName());
         project.setEndDate(LocalDate.parse(projectDto.getEndDate()));

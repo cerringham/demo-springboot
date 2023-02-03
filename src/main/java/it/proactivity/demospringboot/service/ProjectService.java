@@ -1,6 +1,5 @@
 package it.proactivity.demospringboot.service;
 
-import it.proactivity.demospringboot.dto.ProjectCustomerDto;
 import it.proactivity.demospringboot.dto.ProjectDto;
 import it.proactivity.demospringboot.model.Project;
 import it.proactivity.demospringboot.utility.ProjectUtility;
@@ -48,12 +47,19 @@ public class ProjectService {
         }
     }
 
-    public Boolean insertProjectWithDto(ProjectDto projectDto) {
-        if (ValidatorUtility.correctStringName(projectDto.getName()) == false &&
-                ValidatorUtility.correctEndDate(projectDto.getEndDate()) == false &&
-        (ValidatorUtility.correctReportingId(projectDto.getReportingId()) == false ) {
+    public Boolean insertNewProject(ProjectDto projectDto) {
+        if (checkIfParametersAreValid(projectDto) == false) {
             return false;
         }
-        return projectUtility.addNewProjectWithDto(projectDto);
+        return projectUtility.addNewProject(projectDto);
+    }
+
+    public static Boolean checkIfParametersAreValid(ProjectDto projectDto) {
+        if (ValidatorUtility.validName(projectDto.getName()) == false ||
+                ValidatorUtility.validEndDate(projectDto.getEndDate()) == false ||
+                ValidatorUtility.validReportingId(projectDto.getReportingId()) == false) {
+            return false;
+        }
+        return true;
     }
 }
