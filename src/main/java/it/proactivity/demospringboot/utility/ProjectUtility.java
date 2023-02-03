@@ -68,12 +68,7 @@ public class ProjectUtility {
             return false;
         }
         Session session = QueryUtils.createSession();
-        Boolean specialChar = checkSpecialChar(projectDto.getName());
 
-        if (specialChar) {
-            QueryUtils.endSession(session);
-            return false;
-        }
         LocalDate parsedDate = ParsingUtility.parsingStringToDate(projectDto.getEndDate());
         if (parsedDate == null) {
             QueryUtils.endSession(session);
@@ -135,12 +130,4 @@ public class ProjectUtility {
 
         return project;
     }
-
-    private Boolean checkSpecialChar(String name) {
-        if (name.contains("!") || name.contains("£") || name.contains("$") || name.contains("%") || name.contains("&")) {
-            return true;
-        }
-        return false;
-    }
-
 }

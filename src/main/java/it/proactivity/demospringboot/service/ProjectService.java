@@ -54,11 +54,11 @@ public class ProjectService {
 
     public Boolean insertBasicProject(ProjectDto projectDto) {
 
-        if (ProjectValidator.validateName(projectDto.getName()) && ProjectValidator.validateEndDate(projectDto.getEndDate())
-                && ProjectValidator.validateReportingId(projectDto.getReportingId())) {
-            return false;
-        } else {
+        if (ProjectValidator.validateAllBasicParameters(projectDto.getName(), projectDto.getEndDate(),
+                projectDto.getReportingId())) {
             return projectUtility.insertBasicProject(projectDto);
+        } else {
+            return false;
         }
     }
 }

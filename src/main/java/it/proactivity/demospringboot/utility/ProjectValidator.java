@@ -1,21 +1,28 @@
 package it.proactivity.demospringboot.utility;
 
-import it.proactivity.demospringboot.dto.ProjectDto;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class ProjectValidator {
 
     public static Boolean validateName(String name) {
-        if (name == null || name.isEmpty() || name.contains(" ")) {
-            return true;
-        }
-        return false;
+        return StringUtils.isAlpha(name);
     }
 
     public static Boolean validateEndDate(String date) {
         if (date == null || date.isEmpty()) {
             return false;
         }
-        return true;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        try {
+            String rightFormat = date.formatted(formatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
 
     public static Boolean validateReportingId(String reportingId) {
@@ -23,5 +30,9 @@ public class ProjectValidator {
             return false;
         }
         return true;
+    }
+
+    public static Boolean validateAllBasicParameters(String name, String date, String reportingId) {
+        return validateName(name) && validateEndDate(date) && validateReportingId(reportingId);
     }
 }
