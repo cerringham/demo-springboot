@@ -109,7 +109,7 @@ public class ProjectUtility {
     public static Project addNewProjectDto(ProjectDto projectDto) {
         Project project = new Project();
         project.setName(projectDto.getName());
-        project.setEndDate(projectDto.getEndDate());
+        project.setEndDate(LocalDate.parse(projectDto.getEndDate()));
         project.setReportingId(projectDto.getReportingId());
         return project;
     }

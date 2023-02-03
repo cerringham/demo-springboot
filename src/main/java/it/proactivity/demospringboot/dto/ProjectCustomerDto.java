@@ -13,7 +13,7 @@ public class ProjectCustomerDto extends ProjectDto{
 
     private String customerDetail;
 
-    public ProjectCustomerDto(Long id, String name, LocalDate endDate, String customerName, String customerDetail, String detail) {
+    public ProjectCustomerDto(Long id, String name, String endDate, String customerName, String customerDetail, String detail) {
         super(id, name, endDate);
         this.customerName = customerName;
         this.customerDetail = customerDetail;

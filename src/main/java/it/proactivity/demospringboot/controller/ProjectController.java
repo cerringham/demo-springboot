@@ -19,11 +19,11 @@ public class ProjectController {
         return projectService.getAllProject();
     }
 
-    @GetMapping("/projects-customer-information")
+    /*@GetMapping("/projects-customer-information")
     public List<ProjectCustomerDto> getAllProjectsWithCustomerInfo() {
 
         return projectService.getAllProjectWithCustomerInformation();
-    }
+    }*/
 
     @RequestMapping(value = "/insert-project", method = {RequestMethod.GET, RequestMethod.POST})
     public String insertProject(@RequestParam String name, @RequestParam String endDate,
@@ -31,8 +31,8 @@ public class ProjectController {
         return projectService.insertProject(name, endDate, reportingId, customerName);
     }
 
-   @PostMapping
-    public Boolean insertProjectWithDto(ProjectDto projectDto) {
+   @PostMapping("/project-new")
+    public Boolean insertProjectWithDto(@RequestBody ProjectDto projectDto) {
         return projectService.insertProjectWithDto(projectDto);
    }
 }
