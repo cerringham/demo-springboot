@@ -1,5 +1,6 @@
 package it.proactivity.demospringboot.utility;
 
+import it.proactivity.demospringboot.dto.ProjectCustomerDto;
 import it.proactivity.demospringboot.dto.ProjectDto;
 import it.proactivity.demospringboot.model.Customer;
 import it.proactivity.demospringboot.model.Project;
@@ -78,6 +79,7 @@ public class ProjectUtility {
         }
     }
 
+    //dati con customer
     private Project createProject(String name, LocalDate endDate, String reportingId, Customer customer) {
         if (name == null || name.isEmpty() || endDate == null || reportingId == null || reportingId.isEmpty() ||
                 customer == null) {
@@ -114,4 +116,38 @@ public class ProjectUtility {
         project.setReportingId(projectDto.getReportingId());
         return project;
     }
+
+    public static Boolean addNewProjectWithCustomer(ProjectCustomerDto projectDto) {
+        Session session = QueryUtils.createSession();
+        QueryUtils.checkSession(session);
+
+        Project project = dtoCreateProject(projectDto);
+        if (project == null) {
+            QueryUtils.endSession(session);
+            return false;
+        }
+        session.persist(project);
+        QueryUtils.endSession(session);
+        return true;
+    }
+
+    public static Project dtoCreateProject(ProjectCustomerDto projectDto) {
+        Customer customer = new Customer();
+        customer.setName(customer.getName());
+        customer.setEmail(customer.getEmail());
+        customer.setPhoneNumber(customer.getPhoneNumber());
+        customer.setDetail(customer.getDetail());
+
+        Project project = new Project();
+        project.setName(projectDto.getName());
+        project.setEndDate(LocalDate.parse(projectDto.getEndDate()));
+        project.setReportingId(projectDto.getReportingId());
+        project.setCustomer(customer);
+
+        return project;
+    }
+
+
+
+
 }

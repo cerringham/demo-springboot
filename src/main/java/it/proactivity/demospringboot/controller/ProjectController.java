@@ -1,5 +1,6 @@
 package it.proactivity.demospringboot.controller;
 
+import it.proactivity.demospringboot.dto.ProjectCustomerDto;
 import it.proactivity.demospringboot.dto.ProjectDto;
 import it.proactivity.demospringboot.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,4 +35,9 @@ public class ProjectController {
     public Boolean insertAProject(@RequestBody ProjectDto projectDto) {
         return projectService.insertNewProject(projectDto);
    }
+
+    @PostMapping("/project-customer-new")
+    public Boolean insertAProjectCustomer(@RequestBody ProjectCustomerDto projectDto) {
+        return projectService.insertNewProjectWithCustome(projectDto);
+    }
 }
