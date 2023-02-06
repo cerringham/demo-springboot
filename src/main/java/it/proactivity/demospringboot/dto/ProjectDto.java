@@ -13,14 +13,23 @@ import java.time.LocalDate;
 public class ProjectDto {
 
     private Long id;
-    private String name;
-    private LocalDate endDate;
-    private String reportingId;
 
-    public ProjectDto(Long id, String name, LocalDate endDate) {
+    private String name;
+
+    private String reportingId;
+    private String endDate;
+
+
+    public ProjectDto(Long id, String name, String endDate) {
         this.id = id;
         this.name = name;
         this.endDate = endDate;
+    }
+
+    public ProjectDto(String name, String endDate, String reportingId) {
+        this.name = name;
+        this.endDate = endDate;
+        this.reportingId = reportingId;
     }
 
 

@@ -67,4 +67,8 @@ public class CustomerService {
         return customerUtility.deleteCustomer(id);
     }
 
+    public void insertCustomerWithPost(CustomerDto customerDto) {
+
+        customerUtility.insertCustomerWithPost(customerDto);
+    }
 }

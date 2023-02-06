@@ -1,5 +1,6 @@
 package it.proactivity.demospringboot.utility;
 
+import it.proactivity.demospringboot.dto.CustomerDto;
 import it.proactivity.demospringboot.model.Customer;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -84,6 +85,28 @@ public class CustomerUtility {
         }
     }
 
+    public Boolean insertCustomerWithPost(CustomerDto customerDto) {
+        if (customerDto == null) {
+            return false;
+        }
+        Session session = QueryUtils.createSession();
+        String nameExists = checkExistingName(session, customerDto.getName());
+
+        if (nameExists != null) {
+            QueryUtils.endSession(session);
+            return false;
+        }
+        Customer customer = createCustomerFromDto(customerDto);
+        if (customer == null) {
+            QueryUtils.endSession(session);
+            return false;
+        }
+
+        session.persist(customer);
+        QueryUtils.endSession(session);
+        return true;
+    }
+
     public Integer updateCustomer(Long id, String attributeName, String attributeValue) throws IllegalArgumentException {
 
         if (id == null || id == 0l || attributeName == null || attributeName.isEmpty() || attributeValue == null ||
@@ -133,13 +156,23 @@ public class CustomerUtility {
         }
     }
 
-    private static Customer createCustomer(String name, String email, String phoneNumber, String detail) {
+    public static Customer createCustomer(String name, String email, String phoneNumber, String detail) {
         Customer customer = new Customer();
         customer.setName(name);
         customer.setEmail(email);
         customer.setPhoneNumber(phoneNumber);
         if (detail != null || !detail.isEmpty())
             customer.setDetail(detail);
+        return customer;
+    }
+
+    private Customer createCustomerFromDto(CustomerDto customerDto) {
+        Customer customer = new Customer();
+        customer.setName(customerDto.getName());
+        customer.setEmail(customerDto.getEmail());
+        customer.setPhoneNumber(customerDto.getPhoneNumber());
+        customer.setDetail(customerDto.getDetail());
+
         return customer;
     }
 
@@ -167,7 +200,7 @@ public class CustomerUtility {
             return null;
         }
 
-        String customerExists = "SELECT c.name FROM Customer c WHERE c.name = :name";
+        String customerExists = "SELECT c.name FROM Customer c WHERE UPPER(c.name) = UPPER(:name)";
         Query<String> query = session.createQuery(customerExists).setParameter("name", name);
 
         try {
