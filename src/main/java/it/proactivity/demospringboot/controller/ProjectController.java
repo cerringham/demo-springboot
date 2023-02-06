@@ -38,4 +38,9 @@ public class ProjectController {
     public void insertBasicProject(@RequestBody ProjectDto projectDto) {
         projectService.insertBasicProject(projectDto);
     }
+
+    @PostMapping("/insert-complite-project")
+    public void insertCompliteProject(@RequestBody ProjectCustomerDto projectCustomerDto) {
+        projectService.insertCompliteProject(projectCustomerDto);
+    }
 }

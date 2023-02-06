@@ -156,7 +156,7 @@ public class CustomerUtility {
         }
     }
 
-    private static Customer createCustomer(String name, String email, String phoneNumber, String detail) {
+    public static Customer createCustomer(String name, String email, String phoneNumber, String detail) {
         Customer customer = new Customer();
         customer.setName(name);
         customer.setEmail(email);

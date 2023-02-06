@@ -2,12 +2,13 @@ package it.proactivity.demospringboot.dto;
 
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
 import java.time.LocalDate;
 
-
+@NoArgsConstructor
 @Getter
 @Setter
 public class ProjectDto {
@@ -24,6 +25,12 @@ public class ProjectDto {
         this.id = id;
         this.name = name;
         this.endDate = endDate;
+    }
+
+    public ProjectDto(String name, String endDate, String reportingId) {
+        this.name = name;
+        this.endDate = endDate;
+        this.reportingId = reportingId;
     }
 
 

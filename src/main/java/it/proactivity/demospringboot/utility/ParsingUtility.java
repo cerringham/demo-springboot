@@ -7,15 +7,11 @@ import java.time.format.DateTimeParseException;
 
 public class ParsingUtility {
 
-    public static LocalDate parsingStringToDate(String date) {
+    public static LocalDate parseStringToDate(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        try {
-            LocalDate parsedDate = LocalDate.parse(date, formatter);
-            return parsedDate;
-        } catch (DateTimeParseException e) {
-            return null;
-        }
+        LocalDate parsedDate = LocalDate.parse(date, formatter);
+        return parsedDate;
     }
 
     public static String parsingDateToString(LocalDate date) {
@@ -26,6 +22,5 @@ public class ParsingUtility {
         } catch (DateTimeException e) {
             return null;
         }
-
     }
 }

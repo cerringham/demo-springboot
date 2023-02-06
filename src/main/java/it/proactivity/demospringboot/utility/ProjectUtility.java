@@ -1,17 +1,21 @@
 package it.proactivity.demospringboot.utility;
 
+import it.proactivity.demospringboot.dto.ProjectCustomerDto;
 import it.proactivity.demospringboot.dto.ProjectDto;
 import it.proactivity.demospringboot.model.Customer;
 import it.proactivity.demospringboot.model.Project;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.json.JSONObject;
 
 import javax.persistence.NoResultException;
+import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 public class ProjectUtility {
+
 
     public List<Project> getAllProjectWithCustomerInformation() {
         Session session = QueryUtils.createSession();
@@ -46,7 +50,7 @@ public class ProjectUtility {
             return null;
         }
 
-        LocalDate parsedDate = ParsingUtility.parsingStringToDate(endDate);
+        LocalDate parsedDate = ParsingUtility.parseStringToDate(endDate);
         if (parsedDate == null) {
             QueryUtils.endSession(session);
         }
@@ -69,7 +73,7 @@ public class ProjectUtility {
         }
         Session session = QueryUtils.createSession();
 
-        LocalDate parsedDate = ParsingUtility.parsingStringToDate(projectDto.getEndDate());
+        LocalDate parsedDate = ParsingUtility.parseStringToDate(projectDto.getEndDate());
         if (parsedDate == null) {
             QueryUtils.endSession(session);
             return false;
@@ -84,6 +88,65 @@ public class ProjectUtility {
         session.persist(project);
         QueryUtils.endSession(session);
         return true;
+    }
+
+    public void insertCompliteProject(ProjectCustomerDto projectCustomerDto) {
+        if (projectCustomerDto == null) {
+            throw new IllegalArgumentException("The ProjectCustomerDto is null");
+        }
+
+        LocalDate parsedDate = null;
+        Session session = QueryUtils.createSession();
+        Customer customer;
+        try {
+            parsedDate = ParsingUtility.parseStringToDate(projectCustomerDto.getEndDate());
+
+            customer = findCustomerFromAllParameters(session, projectCustomerDto.getCustomerName(),
+                    projectCustomerDto.getCustomerEmail(), projectCustomerDto.getCustomerPhoneNumber(),
+                    projectCustomerDto.getCustomerDetail());
+
+        } catch (DateTimeParseException e) {
+            QueryUtils.endSession(session);
+            throw new IllegalArgumentException("Cannot parse the endDate " + projectCustomerDto.getEndDate());
+        } catch (NoResultException e) {
+
+            customer = CustomerUtility.createCustomer(projectCustomerDto.getCustomerName(),
+                    projectCustomerDto.getCustomerEmail(), projectCustomerDto.getCustomerPhoneNumber(),
+                    projectCustomerDto.getCustomerDetail());
+
+            session.persist(customer);
+        } catch (NullPointerException e) {
+            QueryUtils.endSession(session);
+            throw new IllegalArgumentException("The parameters cannot be null");
+        }
+
+        Project project = createProject(projectCustomerDto.getName(), parsedDate, projectCustomerDto.getReportingId(),
+                customer);
+
+        if (project == null) {
+            session.clear();
+            QueryUtils.endSession(session);
+            throw new IllegalStateException("Cannot create project");
+        }
+        session.persist(project);
+        QueryUtils.endSession(session);
+    }
+
+    private Customer findCustomerFromAllParameters(Session session, String name, String email, String phoneNumber,
+                                                   String detail) {
+        String findCustomer = "SELECT c FROM Customer c " +
+                "WHERE LOWER(c.name) = LOWER(:name) AND LOWER(c.email) = LOWER(:email) AND " +
+                "c.phoneNumber = :phoneNumber AND LOWER(c.detail) = LOWER(:detail)";
+
+        Query<Customer> query = session.createQuery(findCustomer, Customer.class)
+                .setParameter("name", name)
+                .setParameter("email", email)
+                .setParameter("phoneNumber", phoneNumber)
+                .setParameter("detail", detail);
+
+
+        Customer customer = query.getSingleResult();
+        return customer;
     }
 
     private Customer findCustomerFromName(Session session, String name) {
@@ -130,4 +193,10 @@ public class ProjectUtility {
 
         return project;
     }
+
+    private String changePrefixOnPhoneNumber(String phoneNumber) {
+
+        return phoneNumber.replace("+", "00");
+    }
+
 }
