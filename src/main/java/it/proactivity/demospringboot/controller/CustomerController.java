@@ -67,4 +67,9 @@ public class CustomerController {
             return "Delete failed";
         }
     }
+
+    @RequestMapping("/customer-with-projects")
+    public void getCustomerWithProjects(@RequestParam Long id) {
+         customerService.getCustomerWithProjects(id);
+    }
 }

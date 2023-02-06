@@ -7,7 +7,6 @@ import it.proactivity.demospringboot.utility.QueryUtils;
 import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,5 +69,9 @@ public class CustomerService {
     public void insertCustomerWithPost(CustomerDto customerDto) {
 
         customerUtility.insertCustomerWithPost(customerDto);
+    }
+
+    public Customer[] getCustomerWithProjects(Long id) {
+        return customerUtility.getCustomerWithProjects(id);
     }
 }
