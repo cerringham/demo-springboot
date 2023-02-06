@@ -1,5 +1,7 @@
 package it.proactivity.demospringboot.utility;
 
+import it.proactivity.demospringboot.dto.CustomerDto;
+import it.proactivity.demospringboot.dto.CustomerInformationDto;
 import it.proactivity.demospringboot.dto.ProjectCustomerDto;
 import it.proactivity.demospringboot.dto.ProjectDto;
 import it.proactivity.demospringboot.model.Customer;
@@ -11,6 +13,7 @@ import javax.persistence.NoResultException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.DataFormatException;
 
@@ -36,6 +39,14 @@ public class ProjectUtility {
         QueryUtils.endSession(session);
         return projects;
     }
+
+
+    public List<Project> getCustomersInformations() {
+        List<Project> projects = getAllProjectWithCustomerInformation();
+        return projects;
+    }
+
+
 
     public Long insertProject(String name, String endDate, String reportingId, String customerName) throws Exception {
         if (name == null || name.isEmpty() || endDate == null || endDate.isEmpty() || reportingId == null ||
@@ -198,5 +209,7 @@ public class ProjectUtility {
 
         return phoneNumber.replace("+", "00");
     }
+
+
 
 }

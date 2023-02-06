@@ -1,7 +1,6 @@
 package it.proactivity.demospringboot.model;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +11,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "project")
-@AllArgsConstructor
+
 @Getter
 @NoArgsConstructor
 @Setter
@@ -35,6 +34,11 @@ public class Project {
     @ManyToOne
     private Customer customer;
 
+    public void ProjectDto(String name, LocalDate date, String reportingId) {
+        this.name = name;
+        this.endDate = date;
+        this.reportingId = reportingId;
+    }
 
     @Override
     public String toString() {

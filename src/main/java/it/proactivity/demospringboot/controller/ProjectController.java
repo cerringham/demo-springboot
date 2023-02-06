@@ -1,5 +1,7 @@
 package it.proactivity.demospringboot.controller;
 
+import it.proactivity.demospringboot.dto.CustomerDto;
+import it.proactivity.demospringboot.dto.CustomerInformationDto;
 import it.proactivity.demospringboot.dto.ProjectCustomerDto;
 import it.proactivity.demospringboot.dto.ProjectDto;
 import it.proactivity.demospringboot.service.ProjectService;
@@ -43,4 +45,12 @@ public class ProjectController {
     public void insertCompliteProject(@RequestBody ProjectCustomerDto projectCustomerDto) {
         projectService.insertCompliteProject(projectCustomerDto);
     }
+
+
+    @GetMapping("/get-customers-informations")
+    public List<CustomerInformationDto> getCustomersInformations() {
+        return projectService.getCustomersInformations();
+    }
+
+
 }

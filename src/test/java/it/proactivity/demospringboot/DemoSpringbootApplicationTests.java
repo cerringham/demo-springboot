@@ -158,9 +158,9 @@ class DemoSpringbootApplicationTests {
         Integer numberOfCustomerBeforeInsert = customerUtility.getAllCustomer().size();
         Integer numberOfProjectBeforeInsert = projectUtility.getAllProject().size();
 
-        ProjectCustomerDto dto = new ProjectCustomerDto("Progetto di test","2023-03-23",
-                "66637a","Luftanza S.P.A", "luftanza@luftanza2.com",
-                "+992387652", "Airways");
+        ProjectCustomerDto dto = new ProjectCustomerDto("Milanello project","2023-09-28",
+                "61111a","Milan A.C.", "milan@milan.com",
+                "009423938452", "Milan");
 
         //insert new project with new customer
         projectUtility.insertCompliteProject(dto);
@@ -178,9 +178,9 @@ class DemoSpringbootApplicationTests {
         Integer numberOfCustomerBeforeInsert = customerUtility.getAllCustomer().size();
         Integer numberOfProjectBeforeInsert = projectUtility.getAllProject().size();
 
-        ProjectCustomerDto dto = new ProjectCustomerDto("Nuovo progetto","2027-11-11",
-                "11112er","Luftanza S.P.A", "luftanza@luftanza2.com",
-                "+992387652", "Airways");
+        ProjectCustomerDto dto = new ProjectCustomerDto("Team Staff project","2023-09-28",
+                "61111a","Milan A.C.", "milan@milan.com",
+                "009423938452", "Milan");
 
         //insert new project with old customer
         projectUtility.insertCompliteProject(dto);
@@ -292,6 +292,9 @@ class DemoSpringbootApplicationTests {
         assertEquals(message, exception.getMessage());
     }
 
-
+    @Test
+    public void getCustomersInformations() {
+        System.out.println(projectUtility.getAllProjectWithCustomerInformation());
+    }
 
 }
