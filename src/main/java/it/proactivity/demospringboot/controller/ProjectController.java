@@ -31,12 +31,12 @@ public class ProjectController {
         return projectService.insertProject(name, endDate, reportingId, customerName);
     }
 
-   @PostMapping("/project-new")
+    @PostMapping("/project-new")
     public Boolean insertAProject(@RequestBody ProjectDto projectDto) {
         return projectService.insertNewProject(projectDto);
    }
 
-    @PostMapping("/project-customer-new")
+    @PostMapping("/project-customer-new") //addProjectWithCustomerDetails
     public Boolean insertAProjectCustomer(@RequestBody ProjectCustomerDto projectDto) {
         return projectService.insertNewProjectWithCustome(projectDto);
     }

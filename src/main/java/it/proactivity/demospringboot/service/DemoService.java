@@ -44,7 +44,7 @@ public class DemoService {
     public Boolean addProject(ProjectDto projectDto) {
         Project project = new Project();
         project.setName(projectDto.getName());
-        project.setEndDate(projectDto.getEndDate());
+       //project.setEndDate(projectDto.getEndDate());
         project.setReportingId(projectDto.getReportingId());
 
         // salvataggio su db

@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ProjectCustomerDto extends ProjectDto{
+public class ProjectCustomerDto extends ProjectDto {
 
     private String customerName;
     private String customerEmail;

@@ -62,8 +62,9 @@ public class ProjectService {
         return projectUtility.addNewProjectWithCustomer(projectDto);
     }
 
-
+    // check access restriction for methods
     public static Boolean checkIfParametersAreValid(ProjectDto projectDto) {
+        // TODO check if is null
         if (ValidatorUtility.validName(projectDto.getName()) == false ||
                 ValidatorUtility.validEndDate(projectDto.getEndDate()) == false ||
                 ValidatorUtility.validReportingId(projectDto.getReportingId()) == false) {
