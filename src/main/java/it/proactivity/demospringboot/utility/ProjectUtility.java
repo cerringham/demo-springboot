@@ -13,6 +13,7 @@ import javax.persistence.NoResultException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,7 +40,31 @@ public class ProjectUtility {
         return projects;
     }
 
+    public CustomerInformationDto[] getAllProjectForeachCustomer() {
+        List<Project> projects = getListOfProjectWithAllCustomers();
 
+        Long customerDistinctSize = projects.stream()
+                .map(p -> p.getCustomer().getName())
+                .distinct()
+                .count();
+
+        CustomerInformationDto[] customerInformationDtos = new CustomerInformationDto[customerDistinctSize.intValue()];
+
+        for (int i = 0; i < projects.size(); i++) {
+            CustomerInformationDto customerInformationDto = new CustomerInformationDto(projects.get(i).getCustomer().getName());
+
+            customerInformationDtos[i].getProjects().add(new ProjectDto(projects.get(i).getId(), projects.get(i).getName(),
+                    projects.get(i).getEndDate().toString(), projects.get(i).getReportingId()));
+
+            customerInformationDtos[i] = customerInformationDto;
+        }
+         return customerInformationDtos;
+    }
+
+
+
+
+/*
     public List<CustomerInformationDto> getAllProjectForeachCustomer() {
         List<Object[]> objects = getListOfProjectAndCustomerName();
 
@@ -71,6 +96,8 @@ public class ProjectUtility {
                 }).toList();
         return customerInformationDtoList;
     }
+
+ */
 
 
     public Long insertProject(String name, String endDate, String reportingId, String customerName) throws Exception {
@@ -245,6 +272,17 @@ public class ProjectUtility {
         Query query = session.createQuery(getProjectWithCustomer);
         List<Object[]> objects = query.getResultList();
         return objects;
+    }
+
+    private List<Project> getListOfProjectWithAllCustomers() {
+        Session session = QueryUtils.createSession();
+        String selectAllProjectWithCustomer = "SELECT p " +
+                "FROM Project p " +
+                "INNER JOIN FETCH p.customer";
+
+        Query<Project> query = session.createQuery(selectAllProjectWithCustomer);
+        List<Project> projects = query.getResultList();
+        return projects;
     }
 
 }

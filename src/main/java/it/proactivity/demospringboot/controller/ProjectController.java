@@ -49,7 +49,7 @@ public class ProjectController {
 
 
     @GetMapping("/get-customers-informations")
-    public List<CustomerInformationDto> getAllProjectForeachCustomer() {
+    public CustomerInformationDto[] getAllProjectForeachCustomer() {
         return projectService.getAllProjectForeachCustomer();
     }
 

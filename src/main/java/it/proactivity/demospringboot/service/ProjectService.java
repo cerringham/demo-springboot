@@ -69,8 +69,8 @@ public class ProjectService {
         projectUtility.insertCompliteProject(projectCustomerDto);
     }
 
-    public List<CustomerInformationDto> getAllProjectForeachCustomer() {
-        List<CustomerInformationDto> customerInformationDtoList = projectUtility.getAllProjectForeachCustomer();
+    public CustomerInformationDto[] getAllProjectForeachCustomer() {
+        CustomerInformationDto[] customerInformationDtoList = projectUtility.getAllProjectForeachCustomer();
 
         return customerInformationDtoList;
     }

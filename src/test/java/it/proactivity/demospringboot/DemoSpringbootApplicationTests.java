@@ -296,9 +296,10 @@ class DemoSpringbootApplicationTests {
 
     @Test
     public void getCustomersInformations() {
-      List<CustomerInformationDto> projectList = projectUtility.getAllProjectForeachCustomer();
-      projectList.stream().forEach(e ->
-              System.out.println(e.getCustomerName() + "\n" + e.getProjects()));
+      CustomerInformationDto[] projectList = projectUtility.getAllProjectForeachCustomer();
+      for (CustomerInformationDto dto : projectList) {
+          System.out.println(dto.getCustomerName() + "\n" + dto.getProjects());
+      }
     }
 
 }
