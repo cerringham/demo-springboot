@@ -1,6 +1,7 @@
 package it.proactivity.demospringboot.controller;
 
 import it.proactivity.demospringboot.dto.CustomerDto;
+import it.proactivity.demospringboot.dto.CustomerWithProjectDto;
 import it.proactivity.demospringboot.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -68,8 +69,4 @@ public class CustomerController {
         }
     }
 
-    @RequestMapping("/customer-with-projects")
-    public void getCustomerWithProjects(@RequestParam Long id) {
-         customerService.getCustomerWithProjects(id);
-    }
 }

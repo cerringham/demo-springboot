@@ -1,6 +1,8 @@
 package it.proactivity.demospringboot.service;
 
 import it.proactivity.demospringboot.dto.CustomerDto;
+import it.proactivity.demospringboot.dto.CustomerWithProjectDto;
+import it.proactivity.demospringboot.dto.ProjectDto;
 import it.proactivity.demospringboot.model.Customer;
 import it.proactivity.demospringboot.utility.CustomerUtility;
 import it.proactivity.demospringboot.utility.QueryUtils;
@@ -71,7 +73,4 @@ public class CustomerService {
         customerUtility.insertCustomerWithPost(customerDto);
     }
 
-    public Customer[] getCustomerWithProjects(Long id) {
-        return customerUtility.getCustomerWithProjects(id);
-    }
 }

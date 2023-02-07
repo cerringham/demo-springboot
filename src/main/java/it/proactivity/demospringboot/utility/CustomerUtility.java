@@ -6,7 +6,6 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import javax.persistence.NoResultException;
-import java.util.Arrays;
 import java.util.List;
 
 public class CustomerUtility {
@@ -237,26 +236,6 @@ public class CustomerUtility {
             return true;
         }
         return false;
-    }
-
-    public static Customer[] getCustomerWithProjects(Long id) {
-        Session session = QueryUtils.createSession();
-        Customer[] customerWithProjects = new Customer[0];
-        if (session == null) {
-            return null;
-        }
-        Customer customer = getCustomerFromId(session, id);
-        if (customer == null) {
-            QueryUtils.endSession(session);
-            return null;
-        }
-        try {
-            Arrays.fill(customerWithProjects, customer.getName());
-            Arrays.fill(customerWithProjects, customer.getProjects());
-        } catch (NoResultException e) {
-            return null;
-        }
-        return customerWithProjects;
     }
 
 

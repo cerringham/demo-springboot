@@ -8,11 +8,9 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import javax.persistence.NoResultException;
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.zip.DataFormatException;
 
 public class ProjectUtility {
 
@@ -197,6 +195,22 @@ public class ProjectUtility {
     private String changePrefixOnPhoneNumber(String phoneNumber) {
 
         return phoneNumber.replace("+", "00");
+    }
+
+    public List<Project> getAllCustomerWithProjectInfo() {
+        Session session = QueryUtils.createSession();
+        if (session == null) {
+            return null;
+        }
+        String queryString = "SELECT p FROM Project p LEFT JOIN FETCH p.customer";
+        Query<Project> query = session.createQuery(queryString);
+        List<Project> projectList = query.getResultList();
+        if (projectList == null || projectList.isEmpty()) {
+            QueryUtils.endSession(session);
+            return null;
+        }
+        QueryUtils.endSession(session);
+        return projectList;
     }
 
 }

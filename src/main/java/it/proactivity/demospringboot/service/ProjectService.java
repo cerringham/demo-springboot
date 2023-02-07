@@ -1,5 +1,6 @@
 package it.proactivity.demospringboot.service;
 
+import it.proactivity.demospringboot.dto.CustomerWithProjectDto;
 import it.proactivity.demospringboot.dto.ProjectCustomerDto;
 import it.proactivity.demospringboot.dto.ProjectDto;
 import it.proactivity.demospringboot.model.Project;
@@ -10,6 +11,7 @@ import it.proactivity.demospringboot.utility.ProjectValidator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
@@ -70,5 +72,15 @@ public class ProjectService {
                 projectCustomerDto.getCustomerEmail(), projectCustomerDto.getCustomerPhoneNumber());
 
         projectUtility.insertCompliteProject(projectCustomerDto);
+    }
+
+    public List<CustomerWithProjectDto> getCustomerWithProjectInfo() {
+        List<Project> projectList = projectUtility.getAllCustomerWithProjectInfo();
+        List<CustomerWithProjectDto> customerWithProjectDtos = projectList
+                .stream()
+                .map(p -> new CustomerWithProjectDto(p.getCustomer().getName(),
+                        (List<ProjectDto>) new ProjectDto(p.getName(), String.valueOf(p.getEndDate()), p.getReportingId())))
+                .toList();
+        return customerWithProjectDtos;
     }
 }

@@ -25,7 +25,6 @@ public class CustomerDto {
 
     private String detail;
 
-    private List<Project> projectList;
 
     public CustomerDto(String name, String email, String phoneNumber, String detail) {
         this.name = name;
@@ -38,12 +37,9 @@ public class CustomerDto {
         this.email = email;
     }
 
-    public CustomerDto(String name, String email, String phoneNumber, String detail, List<Project> projectList) {
+    public CustomerDto(String name) {
+
         this.name = name;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.detail = detail;
-        this.projectList = projectList;
     }
 
 }
