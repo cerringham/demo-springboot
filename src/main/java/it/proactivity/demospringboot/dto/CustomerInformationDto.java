@@ -1,10 +1,9 @@
 package it.proactivity.demospringboot.dto;
 
-import it.proactivity.demospringboot.model.Project;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.List;
 
 @Setter
@@ -13,10 +12,10 @@ import java.util.List;
 public class CustomerInformationDto {
 
     private String customerName;
-    private List<ProjectDto> projectDtos;
+    private List<ProjectDto> projects ;
 
-    public CustomerInformationDto(String customerName, List<ProjectDto> projectDtos) {
+    public CustomerInformationDto(String customerName, List<ProjectDto> projects) {
         this.customerName = customerName;
-        this.projectDtos = projectDtos;
+        this.projects = projects;
     }
 }

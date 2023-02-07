@@ -1,10 +1,12 @@
 package it.proactivity.demospringboot;
 
+import it.proactivity.demospringboot.dto.CustomerInformationDto;
 import it.proactivity.demospringboot.dto.ProjectCustomerDto;
 import it.proactivity.demospringboot.utility.*;
-import org.hibernate.Session;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -294,7 +296,9 @@ class DemoSpringbootApplicationTests {
 
     @Test
     public void getCustomersInformations() {
-        System.out.println(projectUtility.getAllProjectWithCustomerInformation());
+      List<CustomerInformationDto> projectList = projectUtility.getAllProjectForeachCustomer();
+      projectList.stream().forEach(e ->
+              System.out.println(e.getCustomerName() + "\n" + e.getProjects()));
     }
 
 }

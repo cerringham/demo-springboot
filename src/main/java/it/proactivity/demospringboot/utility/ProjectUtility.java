@@ -1,6 +1,6 @@
 package it.proactivity.demospringboot.utility;
 
-import it.proactivity.demospringboot.dto.CustomerDto;
+
 import it.proactivity.demospringboot.dto.CustomerInformationDto;
 import it.proactivity.demospringboot.dto.ProjectCustomerDto;
 import it.proactivity.demospringboot.dto.ProjectDto;
@@ -10,12 +10,11 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import javax.persistence.NoResultException;
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.DataFormatException;
+import java.util.Objects;
 
 public class ProjectUtility {
 
@@ -41,11 +40,37 @@ public class ProjectUtility {
     }
 
 
-    public List<Project> getCustomersInformations() {
-        List<Project> projects = getAllProjectWithCustomerInformation();
-        return projects;
-    }
+    public List<CustomerInformationDto> getAllProjectForeachCustomer() {
+        List<Object[]> objects = getListOfProjectAndCustomerName();
 
+        List<String> customerNames = objects.stream()
+                .filter(Objects::nonNull)
+                .map(o -> (String) o[0])
+                .distinct()
+                .toList();
+
+        List<Project> projects = objects.stream()
+                .map(o -> (Project) o[1])
+                .toList();
+
+        List<CustomerInformationDto> customerInformationDtoList = customerNames.stream()
+                .map(c -> {
+                    List<ProjectDto> projectList = new ArrayList<>();
+                    CustomerInformationDto customerInformationDto = new CustomerInformationDto();
+                    projects.stream()
+                            .forEach(p -> {
+                                if (c.equals(p.getCustomer().getName())) {
+                                    ProjectDto projectDto = new ProjectDto(p.getId(), p.getName(),
+                                            ParsingUtility.parsingDateToString(p.getEndDate()), p.getReportingId());
+                                    projectList.add(projectDto);
+                                }
+                            });
+                    customerInformationDto.setCustomerName(c);
+                    customerInformationDto.setProjects(projectList);
+                    return customerInformationDto;
+                }).toList();
+        return customerInformationDtoList;
+    }
 
 
     public Long insertProject(String name, String endDate, String reportingId, String customerName) throws Exception {
@@ -211,5 +236,15 @@ public class ProjectUtility {
     }
 
 
+    private List<Object[]> getListOfProjectAndCustomerName() {
+        Session session = QueryUtils.createSession();
+        String getProjectWithCustomer = "SELECT c.name, p " +
+                "FROM Project p, Customer c " +
+                "WHERE p.customer = c.id ";
+
+        Query query = session.createQuery(getProjectWithCustomer);
+        List<Object[]> objects = query.getResultList();
+        return objects;
+    }
 
 }

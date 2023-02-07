@@ -44,8 +44,11 @@ public class DemoController {
         return demoService.createFakeList();
     }
 
+    /*
     @PostMapping("/project/add")
     public Boolean addProject(@RequestBody ProjectDto projectDto) {
         return demoService.addProject(projectDto);
     }
+
+     */
 }

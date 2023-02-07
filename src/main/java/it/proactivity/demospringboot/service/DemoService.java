@@ -41,6 +41,7 @@ public class DemoService {
         return Arrays.asList("Come as you are", "Nevermind", "Smells like ten spirit");
     }
 
+    /*
     public Boolean addProject(ProjectDto projectDto) {
         Project project = new Project();
         project.setName(projectDto.getName());
@@ -50,4 +51,6 @@ public class DemoService {
         // salvataggio su db
         return Boolean.TRUE;
     }
+
+     */
 }

@@ -1,6 +1,5 @@
 package it.proactivity.demospringboot.service;
 
-import it.proactivity.demospringboot.dto.CustomerDto;
 import it.proactivity.demospringboot.dto.CustomerInformationDto;
 import it.proactivity.demospringboot.dto.ProjectCustomerDto;
 import it.proactivity.demospringboot.dto.ProjectDto;
@@ -8,16 +7,12 @@ import it.proactivity.demospringboot.model.Project;
 import it.proactivity.demospringboot.utility.*;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
 
     ProjectUtility projectUtility = new ProjectUtility();
-
 
     public List<ProjectDto> getAllProject() {
         List<Project> projects = projectUtility.getAllProject();
@@ -30,10 +25,10 @@ public class ProjectService {
         return projectDtos;
     }
 
-
     public List<ProjectCustomerDto> getAllProjectWithCustomerInformation() {
         List<Project> projects = projectUtility.getAllProjectWithCustomerInformation();
         List<ProjectCustomerDto> projectCustomerDtos = projects.stream()
+                .filter(p -> p.getCustomer() != null)
                 .map(p -> new ProjectCustomerDto(p.getId(), p.getName(), ParsingUtility.parsingDateToString(p.getEndDate()),
                         p.getCustomer().getName(), p.getCustomer().getDetail())).toList();
 
@@ -74,23 +69,9 @@ public class ProjectService {
         projectUtility.insertCompliteProject(projectCustomerDto);
     }
 
-
-    public List<CustomerInformationDto> getCustomersInformations() {
-        List<Project> projects = projectUtility.getCustomersInformations();
-
-        List<CustomerInformationDto> customerInformationDtoList = projects.stream()
-                .map(p -> {
-
-                    new ProjectDto(p.getName(), String.valueOf(p.getEndDate()), p.getReportingId());
-                    new CustomerInformationDto();
-
-                });
+    public List<CustomerInformationDto> getAllProjectForeachCustomer() {
+        List<CustomerInformationDto> customerInformationDtoList = projectUtility.getAllProjectForeachCustomer();
 
         return customerInformationDtoList;
-
     }
-
-
-
-
 }
