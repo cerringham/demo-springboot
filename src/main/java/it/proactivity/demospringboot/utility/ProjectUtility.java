@@ -50,15 +50,25 @@ public class ProjectUtility {
 
         CustomerInformationDto[] customerInformationDtos = new CustomerInformationDto[customerDistinctSize.intValue()];
 
-        for (int i = 0; i < projects.size(); i++) {
-            CustomerInformationDto customerInformationDto = new CustomerInformationDto(projects.get(i).getCustomer().getName());
-
-            customerInformationDtos[i].getProjects().add(new ProjectDto(projects.get(i).getId(), projects.get(i).getName(),
-                    projects.get(i).getEndDate().toString(), projects.get(i).getReportingId()));
-
+        List<String> customersName = projects.stream()
+                .map(p -> p.getCustomer().getName())
+                .distinct()
+                .toList();
+        for (int i = 0; i < customerInformationDtos.length; i++) {
+            CustomerInformationDto customerInformationDto = new CustomerInformationDto(customersName.get(i));
             customerInformationDtos[i] = customerInformationDto;
         }
-         return customerInformationDtos;
+
+        for (int i = 0; i < customerInformationDtos.length; i++) {
+            for (Project project : projects) {
+                if (project.getCustomer().getName().equals(customerInformationDtos[i].getCustomerName())) {
+                    customerInformationDtos[i].getProjects().add(new ProjectDto(project.getId(), project.getName(),
+                            project.getEndDate().toString(), project.getReportingId()));
+                }
+            }
+        }
+
+        return customerInformationDtos;
     }
 
 

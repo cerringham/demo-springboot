@@ -15,6 +15,7 @@ class DemoSpringbootApplicationTests {
 
     CustomerUtility customerUtility = new CustomerUtility();
     ProjectUtility projectUtility = new ProjectUtility();
+
     @Test
     void contextLoads() {
     }
@@ -160,8 +161,8 @@ class DemoSpringbootApplicationTests {
         Integer numberOfCustomerBeforeInsert = customerUtility.getAllCustomer().size();
         Integer numberOfProjectBeforeInsert = projectUtility.getAllProject().size();
 
-        ProjectCustomerDto dto = new ProjectCustomerDto("Milanello project","2023-09-28",
-                "61111a","Milan A.C.", "milan@milan.com",
+        ProjectCustomerDto dto = new ProjectCustomerDto("Milanello project", "2023-09-28",
+                "61111a", "Milan A.C.", "milan@milan.com",
                 "009423938452", "Milan");
 
         //insert new project with new customer
@@ -180,8 +181,8 @@ class DemoSpringbootApplicationTests {
         Integer numberOfCustomerBeforeInsert = customerUtility.getAllCustomer().size();
         Integer numberOfProjectBeforeInsert = projectUtility.getAllProject().size();
 
-        ProjectCustomerDto dto = new ProjectCustomerDto("Team Staff project","2023-09-28",
-                "61111a","Milan A.C.", "milan@milan.com",
+        ProjectCustomerDto dto = new ProjectCustomerDto("Team Staff project", "2023-09-28",
+                "61111a", "Milan A.C.", "milan@milan.com",
                 "009423938452", "Milan");
 
         //insert new project with old customer
@@ -196,7 +197,7 @@ class DemoSpringbootApplicationTests {
 
     @Test
     public void insertCompliteProjectNullDtoNegativeTest() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->{
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             projectUtility.insertCompliteProject(null);
         });
 
@@ -207,11 +208,11 @@ class DemoSpringbootApplicationTests {
     @Test
     public void insertCompliteProjectNullEndDateNegativeTest() {
 
-        ProjectCustomerDto dto = new ProjectCustomerDto("Nuovo progetto",null,
-                "11112er","Luftanza S.P.A", "luftanza@luftanza2.com",
+        ProjectCustomerDto dto = new ProjectCustomerDto("Nuovo progetto", null,
+                "11112er", "Luftanza S.P.A", "luftanza@luftanza2.com",
                 "+992387652", "Airways");
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->{
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             projectUtility.insertCompliteProject(dto);
         });
 
@@ -222,11 +223,11 @@ class DemoSpringbootApplicationTests {
     @Test
     public void insertCompliteProjectWrongFormatEndDateNegativeTest() {
 
-        ProjectCustomerDto dto = new ProjectCustomerDto("Nuovo progetto","23-12-2023",
-                "11112er","Luftanza S.P.A", "luftanza@luftanza2.com",
+        ProjectCustomerDto dto = new ProjectCustomerDto("Nuovo progetto", "23-12-2023",
+                "11112er", "Luftanza S.P.A", "luftanza@luftanza2.com",
                 "+992387652", "Airways");
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->{
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             projectUtility.insertCompliteProject(dto);
         });
 
@@ -237,11 +238,11 @@ class DemoSpringbootApplicationTests {
     @Test
     public void insertCompliteProjectNullNameNegativeTest() {
 
-        ProjectCustomerDto dto = new ProjectCustomerDto(null,"2023-01-19",
-                "11112er","Luftanza S.P.A", "luftanza@luftanza2.com",
+        ProjectCustomerDto dto = new ProjectCustomerDto(null, "2023-01-19",
+                "11112er", "Luftanza S.P.A", "luftanza@luftanza2.com",
                 "+992387652", "Airways");
 
-        Exception exception = assertThrows(IllegalStateException.class, () ->{
+        Exception exception = assertThrows(IllegalStateException.class, () -> {
             projectUtility.insertCompliteProject(dto);
         });
 
@@ -252,11 +253,11 @@ class DemoSpringbootApplicationTests {
     @Test
     public void insertCompliteProjectEmptyNameNegativeTest() {
 
-        ProjectCustomerDto dto = new ProjectCustomerDto("","2023-01-19",
-                "11112er","Luftanza S.P.A", "luftanza@luftanza2.com",
+        ProjectCustomerDto dto = new ProjectCustomerDto("", "2023-01-19",
+                "11112er", "Luftanza S.P.A", "luftanza@luftanza2.com",
                 "+992387652", "Airways");
 
-        Exception exception = assertThrows(IllegalStateException.class, () ->{
+        Exception exception = assertThrows(IllegalStateException.class, () -> {
             projectUtility.insertCompliteProject(dto);
         });
 
@@ -267,11 +268,11 @@ class DemoSpringbootApplicationTests {
     @Test
     public void insertCompliteProjectEmptyReportingIdNegativeTest() {
 
-        ProjectCustomerDto dto = new ProjectCustomerDto("Somethig","2023-01-19",
-                "","Luftanza S.P.A", "luftanza@luftanza2.com",
+        ProjectCustomerDto dto = new ProjectCustomerDto("Somethig", "2023-01-19",
+                "", "Luftanza S.P.A", "luftanza@luftanza2.com",
                 "+992387652", "Airways");
 
-        Exception exception = assertThrows(IllegalStateException.class, () ->{
+        Exception exception = assertThrows(IllegalStateException.class, () -> {
             projectUtility.insertCompliteProject(dto);
         });
 
@@ -282,11 +283,11 @@ class DemoSpringbootApplicationTests {
     @Test
     public void insertCompliteProjectNullReportingIdNegativeTest() {
 
-        ProjectCustomerDto dto = new ProjectCustomerDto("Somethig","2023-01-19",
-                null,"Luftanza S.P.A", "luftanza@luftanza2.com",
+        ProjectCustomerDto dto = new ProjectCustomerDto("Somethig", "2023-01-19",
+                null, "Luftanza S.P.A", "luftanza@luftanza2.com",
                 "+992387652", "Airways");
 
-        Exception exception = assertThrows(IllegalStateException.class, () ->{
+        Exception exception = assertThrows(IllegalStateException.class, () -> {
             projectUtility.insertCompliteProject(dto);
         });
 
@@ -296,10 +297,10 @@ class DemoSpringbootApplicationTests {
 
     @Test
     public void getCustomersInformations() {
-      CustomerInformationDto[] projectList = projectUtility.getAllProjectForeachCustomer();
-      for (CustomerInformationDto dto : projectList) {
-          System.out.println(dto.getCustomerName() + "\n" + dto.getProjects());
-      }
+        CustomerInformationDto[] projectList = projectUtility.getAllProjectForeachCustomer();
+        for (CustomerInformationDto dto : projectList) {
+            System.out.println(dto.getCustomerName() + "\n" + dto.getProjects());
+        }
     }
 
 }
