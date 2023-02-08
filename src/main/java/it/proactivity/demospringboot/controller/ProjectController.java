@@ -1,6 +1,5 @@
 package it.proactivity.demospringboot.controller;
 
-import it.proactivity.demospringboot.dto.CustomerDto;
 import it.proactivity.demospringboot.dto.CustomerWithProjectDto;
 import it.proactivity.demospringboot.dto.ProjectCustomerDto;
 import it.proactivity.demospringboot.dto.ProjectDto;
@@ -47,7 +46,7 @@ public class ProjectController {
     }
 
     @GetMapping("/project-with-customer")
-    public List<CustomerWithProjectDto> getCustomerWithProjects() {
+    public CustomerWithProjectDto[] getCustomerWithProjects() {
         return projectService.getCustomerWithProjectInfo();
     }
 }

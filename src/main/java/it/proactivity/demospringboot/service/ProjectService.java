@@ -74,13 +74,7 @@ public class ProjectService {
         projectUtility.insertCompliteProject(projectCustomerDto);
     }
 
-    public List<CustomerWithProjectDto> getCustomerWithProjectInfo() {
-        List<Project> projectList = projectUtility.getAllCustomerWithProjectInfo();
-        List<CustomerWithProjectDto> customerWithProjectDtos = projectList
-                .stream()
-                .map(p -> new CustomerWithProjectDto(p.getCustomer().getName(),
-                        (List<ProjectDto>) new ProjectDto(p.getName(), String.valueOf(p.getEndDate()), p.getReportingId())))
-                .toList();
-        return customerWithProjectDtos;
+    public CustomerWithProjectDto[] getCustomerWithProjectInfo() {
+        return projectUtility.allProjectsWithCustomer();
     }
 }

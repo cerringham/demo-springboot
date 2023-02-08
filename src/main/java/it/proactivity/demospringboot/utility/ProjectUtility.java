@@ -1,5 +1,6 @@
 package it.proactivity.demospringboot.utility;
 
+import it.proactivity.demospringboot.dto.CustomerWithProjectDto;
 import it.proactivity.demospringboot.dto.ProjectCustomerDto;
 import it.proactivity.demospringboot.dto.ProjectDto;
 import it.proactivity.demospringboot.model.Customer;
@@ -10,7 +11,10 @@ import org.hibernate.query.Query;
 import javax.persistence.NoResultException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProjectUtility {
 
@@ -202,7 +206,7 @@ public class ProjectUtility {
         if (session == null) {
             return null;
         }
-        String queryString = "SELECT p FROM Project p LEFT JOIN FETCH p.customer";
+        String queryString = "SELECT p FROM Project p INNER JOIN p.customer";
         Query<Project> query = session.createQuery(queryString);
         List<Project> projectList = query.getResultList();
         if (projectList == null || projectList.isEmpty()) {
@@ -211,6 +215,35 @@ public class ProjectUtility {
         }
         QueryUtils.endSession(session);
         return projectList;
+    }
+
+    public static Integer customerCount(List<Project> projects) {
+        return Integer.valueOf((int) projects.stream().map(p -> p.getCustomer().getName()).distinct().count());
+    }
+
+    public CustomerWithProjectDto[] allProjectsWithCustomer() {
+        List<Project> projectList = getAllCustomerWithProjectInfo();
+        CustomerWithProjectDto[] customerWithProjectDtos = new CustomerWithProjectDto[customerCount(projectList)];
+        HashMap<Customer, List<Project>> mappaCustomerProject = new HashMap<>();
+
+        for (Project p : projectList) {
+            if (mappaCustomerProject.containsKey(p.getCustomer())) {
+                mappaCustomerProject.get(p.getCustomer()).add(p);
+            } else {
+                List<Project> customerProjects = new ArrayList<>();
+                customerProjects.add(p);
+                mappaCustomerProject.put(p.getCustomer(), customerProjects);
+            }
+        }
+        int i = 0;
+        for (Map.Entry<Customer, List<Project>> entry : mappaCustomerProject.entrySet()) {
+            CustomerWithProjectDto customerWithProjectDto = new CustomerWithProjectDto();
+            customerWithProjectDto.setName(entry.getKey().getName());
+            customerWithProjectDto.setProjectList(entry.getValue());
+            customerWithProjectDtos[i] = customerWithProjectDto;
+            i++;
+        }
+        return customerWithProjectDtos;
     }
 
 }
