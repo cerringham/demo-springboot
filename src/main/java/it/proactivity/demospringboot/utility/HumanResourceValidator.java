@@ -119,19 +119,19 @@ public class HumanResourceValidator {
         }
 
         Boolean isValid = true;
-        if (!StringUtils.isAlpha(vatCode.substring(5))) {
+        if (!StringUtils.isAlpha(vatCode.substring(0,6))) {
             isValid = false;
         } else if (!StringUtils.isNumeric(vatCode.substring(6, 8))) {
             isValid = false;
-        } else if (!StringUtils.isAlpha(vatCode.substring(8))) {
+        } else if (!StringUtils.isAlpha(vatCode.substring(8,9))) {
             isValid = false;
         } else if (!StringUtils.isNumeric(vatCode.substring(9, 11))) {
             isValid = false;
-        } else if (!StringUtils.isAlpha(vatCode.substring(11))) {
+        } else if (!StringUtils.isAlpha(vatCode.substring(11,12))) {
             isValid = false;
         } else if (!StringUtils.isNumeric(vatCode.substring(12, 15))) {
             isValid = false;
-        } else if (!StringUtils.isAlpha(vatCode.substring(15))) {
+        } else if (!StringUtils.isAlpha(String.valueOf(vatCode.charAt(15)))) {
             isValid = false;
         }
         if (!isValid) {

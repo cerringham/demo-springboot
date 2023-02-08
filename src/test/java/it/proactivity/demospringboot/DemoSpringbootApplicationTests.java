@@ -322,7 +322,7 @@ class DemoSpringbootApplicationTests {
     @Test
     public void validateVatCodeNegativeTest() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            humanResourceValidator.validateVatCode("fcs0IF89L71C000F");
+            humanResourceValidator.validateVatCode("flssss99l90h0902");
 
         });
         String message = "Vat code not valid";
