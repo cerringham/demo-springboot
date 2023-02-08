@@ -14,8 +14,7 @@ public class HumanResourceUtility {
     public List<HumanResource> getAllHumanResource() {
         Session session = QueryUtils.createSession();
         String getAllHumanResource =
-                "SELECT h " +
-                        "FROM HumanResource h";
+                "SELECT h FROM HumanResource h";
         Query<HumanResource> query = session.createQuery(getAllHumanResource);
         List<HumanResource> humanResourceList = query.getResultList();
         QueryUtils.endSession(session);
@@ -62,16 +61,14 @@ public class HumanResourceUtility {
         return true;
     }
 
-    public List<HumanResource> getCda(String isCda) {
-        if (isCda == null || isCda.isEmpty()) {
-            throw new IllegalArgumentException("The value of isCda can't be null or empty");
-        }
+    public List<HumanResource> getCda() {
+
         Session session = QueryUtils.createSession();
         String getCda = "SELECT h " +
                 "FROM HumanResource h " +
-                "WHERE h.isCda = :isCda";
-        Boolean b = Boolean.getBoolean(isCda);
-        Query<HumanResource> query = session.createQuery(getCda).setParameter("isCda", b);
+                "WHERE h.isCda = true";
+
+        Query<HumanResource> query = session.createQuery(getCda);
         try {
             List<HumanResource> humanResource = query.getResultList();
             return humanResource;
@@ -79,6 +76,23 @@ public class HumanResourceUtility {
             return null;
         }
     }
+
+    public List<HumanResource> getCeo() {
+
+        Session session = QueryUtils.createSession();
+        String getCda = "SELECT h " +
+                "FROM HumanResource h " +
+                "WHERE h.isCeo = true";
+
+        Query<HumanResource> query = session.createQuery(getCda);
+        try {
+            List<HumanResource> humanResource = query.getResultList();
+            return humanResource;
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
 
     public HumanResource getHumanResourceFromNameAndSurname(String name, String surname) {
         if (name == null || name.isEmpty() || surname == null || surname.isEmpty()) {

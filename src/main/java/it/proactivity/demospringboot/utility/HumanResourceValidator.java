@@ -41,6 +41,7 @@ public class HumanResourceValidator {
         }
     }
 
+    /*
     public Boolean validateVatCode(String vatCode) {
         if (StringUtils.isEmpty(vatCode)) {
             throw new IllegalArgumentException("VatCode can't be null or empty");
@@ -90,6 +91,8 @@ public class HumanResourceValidator {
         }
     }
 
+     */
+
     public Boolean validatePhoneNumber(String phoneNumber) {
         if (StringUtils.isEmpty(phoneNumber)) {
             throw new IllegalArgumentException("PhoneNumber can't be null or empty");
@@ -103,6 +106,40 @@ public class HumanResourceValidator {
         return true;
     }
 
+
+    public Boolean validateVatCode(String vatCode) {
+        if (StringUtils.isEmpty(vatCode)) {
+            throw new IllegalArgumentException("VatCode can't be null or empty");
+        }
+        if (!StringUtils.isAlphanumeric(vatCode)) {
+            throw new IllegalArgumentException("The vat code must be alphaNumeric");
+        }
+        if (vatCode.length() != 16) {
+            throw new IllegalArgumentException("The vat code is to short or to long");
+        }
+
+        Boolean isValid = true;
+        if (!StringUtils.isAlpha(vatCode.substring(5))) {
+            isValid = false;
+        } else if (!StringUtils.isNumeric(vatCode.substring(6, 8))) {
+            isValid = false;
+        } else if (!StringUtils.isAlpha(vatCode.substring(8))) {
+            isValid = false;
+        } else if (!StringUtils.isNumeric(vatCode.substring(9, 11))) {
+            isValid = false;
+        } else if (!StringUtils.isAlpha(vatCode.substring(11))) {
+            isValid = false;
+        } else if (!StringUtils.isNumeric(vatCode.substring(12, 15))) {
+            isValid = false;
+        } else if (!StringUtils.isAlpha(vatCode.substring(15))) {
+            isValid = false;
+        }
+        if (!isValid) {
+            throw new IllegalArgumentException("Vat code not valid");
+
+        }
+        return true;
+    }
 
 
     /*
@@ -132,62 +169,42 @@ public class HumanResourceValidator {
 
      */
 
-    public Boolean validateNumberOfCeo(Boolean isCeo) {
+    public Boolean validateNumberOfCeoOrCdaForInsert(Boolean isCeo, Boolean isCda) {
         if (isCeo) {
-            List<HumanResource> humanResourceList = humanResourceUtility.getAllHumanResource();
+            List<HumanResource> ceo = humanResourceUtility.getCeo();
 
-            Long numberOfCeo = humanResourceList.stream()
-                    .filter(HumanResource::getIsCeo)
+            Long numberOfCeo = ceo.stream()
                     .count();
-
-
             if (numberOfCeo < 1) {
                 return true;
             } else {
                 throw new IllegalStateException("There is already a ceo");
             }
-        } else {
-            return true;
         }
 
-
-    }
-
-    public Boolean validateNumberOdCda(Boolean isCda) {
         if (isCda) {
-            List<HumanResource> humanResourceList = humanResourceUtility.getAllHumanResource();
+            List<HumanResource> cdaList = humanResourceUtility.getCda();
 
-            Long numberOfCda = humanResourceList.stream()
-                    .filter(HumanResource::getIsCda)
+            Long numberOfCda = cdaList.stream()
                     .count();
+
             if (numberOfCda < 4) {
                 return true;
-
             } else {
                 throw new IllegalStateException("The number of Cda can't be more than 4");
             }
-
         }
         return true;
     }
 
-    public Boolean validateAllHumanResourceDtoParameters(HumanResourceDto humanResourceDto) {
-
-        return validateName(humanResourceDto.getName()) && validateSurname(humanResourceDto.getSurname()) &&
-                validateEmail(humanResourceDto.getEmail()) && validateVatCode(humanResourceDto.getVatCode()) &&
-                validateNumberOdCda(humanResourceDto.getIsCda()) && validateNumberOfCeo(humanResourceDto.getIsCeo()) &&
-                validatePhoneNumber(humanResourceDto.getPhoneNumber());
-    }
-
-    public Boolean validateDeleteCdaOrCeo(Long id) {
+    public Boolean validateCdaOrCeoForDelete(Long id) {
         HumanResource humanResource = humanResourceUtility.getHumanResourceFromId(id);
         if (humanResource == null) {
             throw new IllegalStateException("HumanResource not found");
         }
         if (humanResource.getIsCda()) {
-            List<HumanResource> humanResourceList = humanResourceUtility.getAllHumanResource();
+            List<HumanResource> humanResourceList = humanResourceUtility.getCda();
             Long numberOfCda = humanResourceList.stream()
-                    .filter(HumanResource::getIsCda)
                     .count();
             if (numberOfCda > 1) {
                 return true;
@@ -198,5 +215,13 @@ public class HumanResourceValidator {
             throw new IllegalArgumentException("The Ceo can't be deleted");
         }
         return true;
+    }
+
+    public Boolean validateAllHumanResourceDtoParametersForInsert(HumanResourceDto humanResourceDto) {
+
+        return validateName(humanResourceDto.getName()) && validateSurname(humanResourceDto.getSurname()) &&
+                validateEmail(humanResourceDto.getEmail()) && validateVatCode(humanResourceDto.getVatCode()) &&
+                validateNumberOfCeoOrCdaForInsert(humanResourceDto.getIsCda(), humanResourceDto.getIsCeo()) &&
+                validatePhoneNumber(humanResourceDto.getPhoneNumber());
     }
 }

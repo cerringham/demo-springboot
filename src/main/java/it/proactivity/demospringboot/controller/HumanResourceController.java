@@ -15,23 +15,23 @@ public class HumanResourceController {
     HumanResourceService humanResourceService;
 
     @GetMapping("get-all-human-resources")
-    public List<HumanResource> getAllHumanResource() {
+    public List<HumanResourceDto> getAllHumanResource() {
         return humanResourceService.getAllHumanResource();
     }
 
     @GetMapping("get-human-resource-from-id")
-    public HumanResource getHumanResourceFromId(@PathVariable Long id) {
+    public HumanResourceDto getHumanResourceFromId(@PathVariable Long id) {
         return humanResourceService.getHumanResourceFromId(id);
     }
 
     @GetMapping("get-human-resource-from-name-and-surname")
-    public HumanResource getHumanResourceFromNameAndSurname(@RequestParam String name, @RequestParam String surname) {
+    public HumanResourceDto getHumanResourceFromNameAndSurname(@RequestParam String name, @RequestParam String surname) {
         return humanResourceService.getHumanResourceFromNameAndSurname(name, surname);
     }
 
     @GetMapping("get-cda")
-    public List<HumanResource> getCda(@RequestParam String isCda) {
-        return humanResourceService.getCda(isCda);
+    public List<HumanResourceDto> getCda() {
+        return humanResourceService.getCda();
     }
 
     @PostMapping("insert-human-resource")

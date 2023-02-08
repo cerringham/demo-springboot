@@ -17,31 +17,43 @@ public class HumanResourceService {
 
     public Boolean insertHumanResource(HumanResourceDto humanResourceDto) {
 
-        humanResourceValidator.validateAllHumanResourceDtoParameters(humanResourceDto);
+        humanResourceValidator.validateAllHumanResourceDtoParametersForInsert(humanResourceDto);
         utility.insertHumanResource(humanResourceDto);
         return true;
     }
 
     public Boolean deleteHumanResource(Long id) {
 
-        humanResourceValidator.validateDeleteCdaOrCeo(id);
+        humanResourceValidator.validateCdaOrCeoForDelete(id);
         utility.deleteHumanResource(id);
         return true;
     }
 
-    public List<HumanResource> getAllHumanResource() {
-        return utility.getAllHumanResource();
+    public List<HumanResourceDto> getAllHumanResource() {
+        List<HumanResource> humanResourceList = utility.getAllHumanResource();
+
+        List<HumanResourceDto> humanResourceDtoList = humanResourceList.stream()
+                .map(h -> new HumanResourceDto(h.getName(), h.getSurname(), h.getEmail(), h.getPhoneNumber(),
+                        h.getVatCode(), h.getIsCeo(), h.getIsCda()))
+                .toList();
+
+        return humanResourceDtoList;
     }
 
-    public HumanResource getHumanResourceFromId(Long id) {
+    public HumanResourceDto getHumanResourceFromId(Long id) {
         HumanResource humanResource = utility.getHumanResourceFromId(id);
         if (humanResource == null) {
             throw new NoResultException("HumanResource not found");
         }
-        return humanResource;
+
+        HumanResourceDto humanResourceDto = new HumanResourceDto(humanResource.getName(), humanResource.getSurname(),
+                humanResource.getEmail(), humanResource.getPhoneNumber(), humanResource.getVatCode(),
+                humanResource.getIsCeo(), humanResource.getIsCda());
+
+        return humanResourceDto;
     }
 
-    public HumanResource getHumanResourceFromNameAndSurname(String name, String surname) {
+    public HumanResourceDto getHumanResourceFromNameAndSurname(String name, String surname) {
         humanResourceValidator.validateName(name);
         humanResourceValidator.validateSurname(surname);
 
@@ -49,14 +61,25 @@ public class HumanResourceService {
         if (humanResource == null) {
             throw new IllegalStateException("HumanResource not found");
         }
-        return humanResource;
+
+        HumanResourceDto humanResourceDto = new HumanResourceDto(humanResource.getName(), humanResource.getSurname(),
+                humanResource.getEmail(), humanResource.getPhoneNumber(), humanResource.getVatCode(),
+                humanResource.getIsCeo(), humanResource.getIsCda());
+
+        return humanResourceDto;
     }
 
-    public List<HumanResource> getCda(String isCda) {
-        List<HumanResource> humanResourceList = utility.getCda(isCda);
+    public List<HumanResourceDto> getCda() {
+        List<HumanResource> humanResourceList = utility.getCda();
         if (humanResourceList == null || humanResourceList.isEmpty()) {
             throw new IllegalArgumentException("No Cda found");
         }
-        return humanResourceList;
+
+        List<HumanResourceDto> humanResourceDtoList = humanResourceList.stream()
+                .map(h -> new HumanResourceDto(h.getName(), h.getSurname(), h.getEmail(), h.getPhoneNumber(),
+                        h.getVatCode(), h.getIsCeo(), h.getIsCda()))
+                .toList();
+
+        return humanResourceDtoList;
     }
 }

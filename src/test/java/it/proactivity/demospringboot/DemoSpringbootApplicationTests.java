@@ -322,7 +322,7 @@ class DemoSpringbootApplicationTests {
     @Test
     public void validateVatCodeNegativeTest() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            humanResourceValidator.validateVatCode("f0ssss99l90h090f");
+            humanResourceValidator.validateVatCode("fcs0IF89L71C000F");
 
         });
         String message = "Vat code not valid";
@@ -493,8 +493,8 @@ class DemoSpringbootApplicationTests {
 
     @Test
     public void findCdaTest() {
-        List<HumanResource> humanResourceList = humanResourceService.getCda("true");
-        for (HumanResource humanResource : humanResourceList) {
+        List<HumanResourceDto> humanResourceList = humanResourceService.getCda();
+        for (HumanResourceDto humanResource : humanResourceList) {
             System.out.println(humanResource);
         }
     }
