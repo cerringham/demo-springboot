@@ -23,6 +23,9 @@ public class HumanResourceService {
     }
 
     public HumanResourceDto getHumanResourceFromId(Long id) {
+        if (id == null) {
+            return null;
+        }
         HumanResource humanResource = humanResourceUtility.getHumanResourceFromId(id);
         if (humanResource == null) {
             return null;
@@ -34,6 +37,9 @@ public class HumanResourceService {
     }
 
     public HumanResourceDto getHumanResourceFromNameAndSurname(String name, String surname) {
+        if (name == null || name.isEmpty() || surname == null || surname.isEmpty()) {
+            return null;
+        }
         HumanResource humanResource = humanResourceUtility.getHumanResourceFromNameAndSurname(name, surname);
         if (humanResource == null) {
             return null;
@@ -45,6 +51,9 @@ public class HumanResourceService {
     }
 
     public List<HumanResourceDto> getHumanResourcesByCda(Boolean isCda) {
+        if (isCda == null) {
+            return null;
+        }
         List<HumanResource> humanResources = humanResourceUtility.getHumanResourcesByCda(isCda);
             if (humanResources == null) {
                 return null;
@@ -55,8 +64,10 @@ public class HumanResourceService {
             return humanResourceDtos;
     }
 
-    public HumanResource insertNewHumanResource(HumanResourceDto humanResourceDto) {
-        HumanResource humanResource = humanResourceUtility.insertNewHumanResource();
-
+    public Boolean insertHumanResource(HumanResourceDto humanResourceDto) {
+        if (humanResourceDto == null) {
+            return null;
+        }
+        return humanResourceUtility.insertHumanResource(humanResourceDto);
     }
 }

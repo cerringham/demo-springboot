@@ -1,6 +1,5 @@
 package it.proactivity.demospringboot.controller;
 
-import it.proactivity.demospringboot.dto.CustomerDto;
 import it.proactivity.demospringboot.dto.HumanResourceDto;
 import it.proactivity.demospringboot.service.HumanResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +34,8 @@ public class HumanResourceController {
     }
 
     @PostMapping("/insert-human-resource")
-    public HumanResourceDto insertNewHumanResource(@RequestBody HumanResourceDto humanResourceDto) {
-        return humanResourceDto.insertHumanResource(customerDto);
+    public Boolean insertHumanResource(@RequestBody HumanResourceDto humanResourceDto) {
+        return humanResourceService.insertHumanResource(humanResourceDto);
     }
 
 }

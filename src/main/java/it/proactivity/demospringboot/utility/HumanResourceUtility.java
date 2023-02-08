@@ -8,6 +8,8 @@ import org.hibernate.query.Query;
 import javax.persistence.NoResultException;
 import java.util.List;
 
+import static it.proactivity.demospringboot.utility.CustomerUtility.checkExistingName;
+
 public class HumanResourceUtility {
 
     // elenco di tutte le HumanResource (servizio GET senza parametri)
@@ -46,11 +48,11 @@ public class HumanResourceUtility {
     public HumanResource getHumanResourceFromNameAndSurname(String name, String surname) {
         Session session = QueryUtils.createSession();
         String stringQuery = "SELECT h FROM HumanResource h " +
-                "WHERE h.name = :name " +
-                "AND h.surname = :surname";
+                "WHERE UPPER(h.name) = :name " +
+                "AND UPPER(h.surname) = :surname";
         Query<HumanResource> query = session.createQuery(stringQuery)
-                .setParameter("name", name)
-                .setParameter("surname", surname);
+                .setParameter("name", name.toUpperCase())
+                .setParameter("surname", surname.toUpperCase());
         try {
             HumanResource humanResource = query.getSingleResult();
             return humanResource;
@@ -76,13 +78,43 @@ public class HumanResourceUtility {
         }
     }
 
+    public Boolean insertHumanResource(HumanResourceDto humanResourceDto) {
+        if (humanResourceDto == null) {
+            return false;
+        }
+        Session session = QueryUtils.createSession();
+        String nameExists = checkExistingName(session, humanResourceDto.getName());
+        if (nameExists != null) {
+            QueryUtils.endSession(session);
+            return false;
+        }
+        HumanResource humanResource = insertNewHumanResource(humanResourceDto);
+        if (humanResource == null) {
+            QueryUtils.endSession(session);
+            return false;
+        }
+        session.persist(humanResource);
+        QueryUtils.endSession(session);
+        return true;
+    }
+
     //inserimento di una HumanResource (servizio POST con requestBody)
-    public HumanResource insertNewHumanResource(HumanResourceDto humanResourceDto) {
+    private static HumanResource insertNewHumanResource(HumanResourceDto humanResourceDto) {
         HumanResource humanResource = new HumanResource();
         humanResource.setId(humanResourceDto.getId());
         humanResource.setName(humanResourceDto.getName());
+        humanResource.setSurname(humanResourceDto.getSurname());
+        humanResource.setEmail(humanResourceDto.getEmail());
         humanResource.setPhoneNumber(humanResourceDto.getPhoneNumber());
+        humanResource.setVatCode(humanResourceDto.getVatCode());
+        humanResource.setIsCeo(humanResourceDto.getIsCeo());
+        humanResource.setIsCda(humanResourceDto.getIsCda());
 
+        return humanResource;
+
+    }
+
+    public HumanResourceDto getCeo() {
 
     }
 
