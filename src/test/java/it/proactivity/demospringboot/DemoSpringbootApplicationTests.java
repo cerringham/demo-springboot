@@ -1,9 +1,13 @@
 package it.proactivity.demospringboot;
 
 import it.proactivity.demospringboot.dto.CustomerInformationDto;
+import it.proactivity.demospringboot.dto.HumanResourceDto;
 import it.proactivity.demospringboot.dto.ProjectCustomerDto;
+import it.proactivity.demospringboot.model.HumanResource;
+import it.proactivity.demospringboot.service.HumanResourceService;
 import it.proactivity.demospringboot.utility.*;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
@@ -13,8 +17,14 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class DemoSpringbootApplicationTests {
 
+    @Autowired
+    HumanResourceService humanResourceService;
     CustomerUtility customerUtility = new CustomerUtility();
     ProjectUtility projectUtility = new ProjectUtility();
+
+
+    HumanResourceValidator humanResourceValidator = new HumanResourceValidator();
+    HumanResourceUtility humanResourceUtility = new HumanResourceUtility();
 
     @Test
     void contextLoads() {
@@ -303,4 +313,189 @@ class DemoSpringbootApplicationTests {
         }
     }
 
+
+    @Test
+    public void validateVatCodePositiveTest() {
+        assertTrue(humanResourceValidator.validateVatCode("fcssss99l90h090f"));
+    }
+
+    @Test
+    public void validateVatCodeNegativeTest() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            humanResourceValidator.validateVatCode("f0ssss99l90h090f");
+
+        });
+        String message = "Vat code not valid";
+        assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    public void validateNullVatCodeNegativeTest() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            humanResourceValidator.validateVatCode(null);
+
+        });
+        String message = "VatCode can't be null or empty";
+        assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    public void validateEmptyVatCodeNegativeTest() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            humanResourceValidator.validateVatCode("");
+
+        });
+        String message = "VatCode can't be null or empty";
+        assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    public void validateShortVatCodeNegativeTest() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            humanResourceValidator.validateVatCode("fcss99l90h090f");
+
+        });
+        String message = "The vat code is to short";
+        assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    public void validateLongVatCodeNegativeTest() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            humanResourceValidator.validateVatCode("fcss99l90h090ffff");
+
+        });
+        String message = "The vat code is to long";
+        assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    public void validateSpecialCharVatCodeNegativeTest() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            humanResourceValidator.validateVatCode("fcssss99l90h090f@@");
+
+        });
+        String message = "The vat code must be alphaNumeric";
+        assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    public void validateNamePositiveTest() {
+        assertTrue(humanResourceValidator.validateName("Alessio"));
+    }
+
+    @Test
+    public void validateNullNameNegativeTest() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            humanResourceValidator.validateName(null);
+        });
+        String message = "Name can't be null or empty";
+        assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    public void validateEmptyNameNegativeTest() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            humanResourceValidator.validateName("");
+        });
+        String message = "Name can't be null or empty";
+        assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    public void validateWrongNameNegativeTest() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            humanResourceValidator.validateName("ale9876@@@");
+        });
+        String message = "The name must contains only characters";
+        assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    public void validateEmail() {
+        assertTrue(humanResourceValidator.validateEmail("mail@mail.it"));
+    }
+
+    @Test
+    public void validateEmailNullMailNegativeTest() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            humanResourceValidator.validateEmail(null);
+        });
+        String message = "The email can't be null or empty";
+        assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    public void validateEmailEmptyMailNegativeTest() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            humanResourceValidator.validateEmail("");
+        });
+        String message = "The email can't be null or empty";
+        assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    public void validateSurnamePositiveTest() {
+        assertTrue(humanResourceValidator.validateSurname("cassarino"));
+    }
+
+    @Test
+    public void validateNullSurnameNegativeTest() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            humanResourceValidator.validateSurname(null);
+        });
+
+        String message = "Surname can't be null or empty";
+        assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    public void validateEmptySurnameNegativeTest() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            humanResourceValidator.validateSurname("");
+        });
+
+        String message = "Surname can't be null or empty";
+        assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    public void validateWrongSurnameNegativeTest() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            humanResourceValidator.validateSurname("cas566@");
+        });
+
+        String message = "The surname must contains only characters";
+        assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    public void insertHumanResourcePositiveTest() {
+        HumanResourceDto humanResourceDto = new HumanResourceDto("Paolo", "Maldini", "maldini@maldini.it",
+                "+393376548987", "lppsll87s26r769c", false, true);
+        assertTrue(humanResourceService.insertHumanResource(humanResourceDto));
+    }
+
+    @Test
+    public void deleteHumanResource() {
+        assertTrue(humanResourceService.deleteHumanResource(7l));
+    }
+
+    @Test
+    public void findHumanResourceFromNameAndSurnameTest() {
+        System.out.println(humanResourceService.getHumanResourceFromNameAndSurname("Michele", "Marrone"));
+    }
+
+    @Test
+    public void findHumanResourcefromIdTest() {
+        System.out.println(humanResourceService.getHumanResourceFromId(5l));
+    }
+
+    @Test
+    public void findCdaTest() {
+        List<HumanResource> humanResourceList = humanResourceService.getCda("true");
+        for (HumanResource humanResource : humanResourceList) {
+            System.out.println(humanResource);
+        }
+    }
 }
